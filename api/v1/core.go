@@ -67,7 +67,6 @@ func CoreHandler(ctx *gin.Context) {
 	} else {
 		fmt.Println("走首页程序")
 		data := tv.GetHome()
-		fmt.Println(data)
 		ctx.JSON(200, data)
 	}
 
