@@ -51,11 +51,12 @@ func CoreHandler(ctx *gin.Context) {
 		} else {
 			idsArr = append(idsArr, ids)
 		}
-
+		fmt.Println("视频ID数组", idsArr)
+		data := tv.GetDetails(idsArr)
 		ctx.JSON(200, gin.H{
 			"code":    0,
 			"message": "走详情程序",
-			"data":    "tv provider: " + tvProvider,
+			"list":    data,
 		})
 	} else if ok4 {
 		// https://xxx.xX.xx?ac=detail&quick=是否快搜&wd=搜索词
