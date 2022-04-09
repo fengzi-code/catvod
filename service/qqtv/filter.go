@@ -8,6 +8,10 @@ import (
 	"strings"
 )
 
+/*
+	qqtv filter
+这个函数的作用是将前端传过来的ext参数解析成filter文本
+*/
 func (this *QQTV) GetFilter(ext string) (filter string) {
 	filtersPrefix := "_all=1&pagesize=30&"
 	filtersDefault := "sort=19"

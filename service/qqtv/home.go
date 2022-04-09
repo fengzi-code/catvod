@@ -1,17 +1,17 @@
 package qqtv
 
 import (
-	"catvod/global"
 	"catvod/model"
+	"catvod/utils"
 	"fmt"
 	"github.com/antchfx/htmlquery"
-	"strings"
 )
 
 type QQTV struct {
-	VodClass []model.VodClass
-	Filters  string
-	Channel  string //就是vodClass里的TypeId，只包含当前的
+	VodClass  []model.VodClass
+	Filters   string
+	Channel   string //就是vodClass里的TypeId，只包含当前的
+	FilterMap model.FilterMap
 }
 
 const baseUrl = "https://v.qq.com/channel"
@@ -31,74 +31,39 @@ func (this *QQTV) GetHome() (res model.HomeContent) {
 		fmt.Println("qqtv get home html error: ", err)
 		return
 	}
-	vodClassNodes := htmlquery.Find(doc, "//div[@class='site_channel']/a[contains(@class, 'channel_nav')]")
-	for _, vodClassNode := range vodClassNodes {
-		vodClassUrl := htmlquery.SelectAttr(vodClassNode, "href")
-		vodClassName := htmlquery.InnerText(vodClassNode)
-		if vodClassName == "VIP会员" {
-			continue
-		}
-		urlArr := strings.Split(vodClassUrl, "/")
-		vodClassUrl = urlArr[len(urlArr)-1]
-		if vodClassUrl == "" {
-			continue
-		}
-		// 如果this.VodClass不存在此分类，则添加到this.VodClass数组中
-		this.VodClass = append(this.VodClass, model.VodClass{
-			TypeName: vodClassName,
-			TypeId:   vodClassUrl,
-		})
-	}
-	fmt.Printf("%+v\n", this.VodClass)
-	list := htmlquery.Find(doc, "//div[@class='list_item']")
+
 	res.VodClass = make([]model.VodClass, 0)
 	res.VodList = make([]model.VodInfo, 0)
+	classJsonFile := "static/qqtv/class.json"
+
+	exist, err := utils.PathExists(classJsonFile)
+	if !exist {
+		this.GetVodClass(doc)
+		err = utils.SaveClassJson(classJsonFile, this.VodClass)
+	}
+	if err != nil {
+		return
+	}
+	this.VodClass = utils.LoadClassJson(classJsonFile)
 	res.VodClass = this.VodClass
-	// 取filter节点
-	filterNodes := htmlquery.Find(doc, "//div[@class='mod_list_filter']/div[contains(@class, 'filter_line')]")
-	var filts model.Filters
-	for _, filterNode := range filterNodes {
-		// 在这里定义filterValues变量，是为了每次都是新的变量，避免把之前的值也加入进来了
-		var filterValues []model.FilterValueItems
-		filterName := htmlquery.InnerText(htmlquery.FindOne(filterNode, "//span[@class='filter_label']"))
-		filterKey := htmlquery.SelectAttr(filterNode, "data-key")
-		filterValueNodes := htmlquery.Find(filterNode, "//a[contains(@class, 'filter_item')]")
-		for _, filterValueNode := range filterValueNodes {
-			filterValueName := htmlquery.InnerText(filterValueNode)
-			filterValueId := htmlquery.SelectAttr(filterValueNode, "data-value")
-			filterValues = append(filterValues, model.FilterValueItems{
-				ShowName: filterValueName,
-				UrlValue: filterValueId,
-			})
+	this.FilterMap = make(model.FilterMap)
+	// 如果filter文件存在就读文件，不存在则创建并写入
+	filterJsonFile := "static/qqtv/filters.json"
+	exist, err = utils.PathExists(filterJsonFile)
+	if !exist {
+		for _, t := range this.VodClass {
+			this.GetFilterMap(t.TypeId)
 		}
-		filts = append(filts, model.Filter{
-			Name:  filterName,
-			Key:   filterKey,
-			Value: filterValues,
-		})
+		err = utils.SaveFilterJson(filterJsonFile, this.FilterMap)
 	}
-	filterMap := make(model.FilterMap)
-	filterMap[this.Channel] = filts
-	res.Filters = filterMap
-	for _, item := range list {
-		a := htmlquery.FindOne(item, "//a[@class='figure']")
-		vodPic := htmlquery.InnerText(htmlquery.FindOne(item, "//img[@class='figure_pic']/@src"))
-		vodId := htmlquery.SelectAttr(a, "data-float")
-		vodName := htmlquery.SelectAttr(a, "title")
-		vodRemarks := htmlquery.InnerText(htmlquery.FindOne(item, "//div[@class='figure_caption']"))
-		if strings.HasPrefix(vodPic, "//") {
-			vodPic = strings.Replace(vodPic, "//", "https://", 1)
-		} else if strings.TrimSpace(vodPic) == "" {
-			vodPic = global.DefaultPic
-		}
-		// fmt.Printf("vod_id: %s, vod_name: %s, vod_img: %s\n", vodId, vodName, vodPic)
-		res.VodList = append(res.VodList, model.VodInfo{
-			VodId:      vodId,
-			VodName:    vodName,
-			VodPic:     vodPic,
-			VodRemarks: vodRemarks,
-		})
+	if err != nil {
+		return
 	}
+	this.FilterMap = utils.LoadFilterJson(filterJsonFile)
+	fmt.Printf("%+v\n", this.FilterMap)
+	res.Filters = this.FilterMap
+	// 从页面获取VodInfo
+	res.VodList = GetVodInfo(doc)
 	if len(res.VodList) > 0 {
 		res.Code = 0
 		res.Msg = "success"

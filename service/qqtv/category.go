@@ -1,28 +1,28 @@
 package qqtv
 
 import (
-	"catvod/global"
 	"catvod/model"
 	"fmt"
 	"github.com/antchfx/htmlquery"
 	"strconv"
-	"strings"
 )
 
 /*
 分类页
 */
+const cateGoryApi = "https://v.qq.com/x/bu/pagesheet/list?append=1&channel=%s&listpage=1&offset=%d&pagesize=30&%s"
 
 func (this *QQTV) GetCategory(typeid string, page int) (res model.Category) {
 	fmt.Println("GetCategory", this.Filters)
-	url := fmt.Sprintf(baseUrl+"/%s?listpage=%d&channel=%s&%s", typeid, page, typeid, this.Filters)
+	// url := fmt.Sprintf(baseUrl+"/%s?listpage=%d&channel=%s&%s", typeid, page, typeid, this.Filters)
+	url := fmt.Sprintf(cateGoryApi, typeid, (page-1)*30, this.Filters)
 	fmt.Println("分页地址：", url)
 	doc, err := htmlquery.LoadURL(url)
 	if err != nil {
 		fmt.Println("qqtv get home html error: ", err)
 		return
 	}
-	list := htmlquery.Find(doc, "//div[@class='list_item']")
+
 	res.Page = page
 	res.Limit = 30
 	totalText := htmlquery.FindOne(doc, "//div[@class='mod_list_filter']/div[@class='filter_result ']")
@@ -42,25 +42,7 @@ func (this *QQTV) GetCategory(typeid string, page int) (res model.Category) {
 	res.PageCount = pageMax
 
 	res.VodList = make([]model.VodInfo, 0)
-	for _, item := range list {
-		a := htmlquery.FindOne(item, "//a[@class='figure']")
-		vodPic := htmlquery.InnerText(htmlquery.FindOne(item, "//img[@class='figure_pic']/@src"))
-		vodId := htmlquery.SelectAttr(a, "data-float")
-		vodName := htmlquery.SelectAttr(a, "title")
-		vodRemarks := htmlquery.InnerText(htmlquery.FindOne(item, "//div[@class='figure_caption']"))
-		if strings.HasPrefix(vodPic, "//") {
-			vodPic = strings.Replace(vodPic, "//", "https://", 1)
-		} else if strings.TrimSpace(vodPic) == "" {
-			vodPic = global.DefaultPic
-		}
-		// fmt.Printf("vod_id: %s, vod_name: %s, vod_img: %s\n", vodId, vodName, vodPic)
-		res.VodList = append(res.VodList, model.VodInfo{
-			VodId:      vodId,
-			VodName:    vodName,
-			VodPic:     vodPic,
-			VodRemarks: vodRemarks,
-		})
-	}
+	res.VodList = GetVodInfo(doc)
 	if len(res.VodList) > 0 {
 		res.Code = 0
 		res.Msg = "success"
