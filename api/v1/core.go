@@ -30,6 +30,8 @@ func CoreHandler(ctx *gin.Context) {
 		if pgInt < 1 {
 			pgInt = 1
 		}
+		filters := tv.GetFilter(ext)
+		fmt.Println("CoreHandler", filters)
 		data := tv.GetCategory(t, pgInt)
 		fmt.Println(data)
 		ctx.JSON(200, data)

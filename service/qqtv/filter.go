@@ -1,7 +1,6 @@
 package qqtv
 
 import (
-	model "catvod/model/mgtv"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -9,44 +8,37 @@ import (
 	"strings"
 )
 
-var filtersPrefix, filtersDefault, filters string
-
 func (this *QQTV) GetFilter(ext string) (filter string) {
-	filtersPrefix = "&listpage=1&"
-	filtersDefault = "_all=1&sort=19"
+	filtersPrefix := "_all=1&pagesize=30&"
+	filtersDefault := "sort=19"
 	ext = strings.Replace(ext, "0%3D", "", -1)
-	filters = getChannelId(ext) //对过滤规则进行修理
-
-	return filters
-}
-
-func getChannelId(ext string) string {
 	if ext == "" {
-		filters = filtersPrefix + filtersDefault
+		filter = filtersPrefix + filtersDefault
 	} else {
-		//{"area":"12"}
-		decodeBytes, err := base64.StdEncoding.DecodeString(ext) //对ext解码
+		// 对ext解码
+		decodeBytes, err := base64.StdEncoding.DecodeString(ext)
 		if err != nil {
-			log.Fatalln(err)
+			log.Println("base64 decode error:", err)
+			return filtersPrefix + filtersDefault
 		}
-		extDecode := string(decodeBytes) //对解码后的数据转换为字符串格式
-		var extStruct model.ExtStruct
-
-		err = json.Unmarshal([]byte(extDecode), &extStruct) //对收到的过滤规则反序列化并存到extStruct结构体
+		// 将json字符串转换为map类型，并将key和value进行拼接成字符串
+		var filterMap map[string]string
+		fmt.Printf("decodeBytes: %s\n", decodeBytes)
+		err = json.Unmarshal(decodeBytes, &filterMap)
 		if err != nil {
-			fmt.Println(err)
+			log.Println("json unmarshal error:", err)
+			return filtersPrefix + filtersDefault
 		}
-		area := extStruct.Area
-		year := extStruct.Year
-		kind := extStruct.Kind
-		chargeInfo := extStruct.ChargeInfo
-		sort := extStruct.Sort
-		edition := extStruct.Edition
-		feature := extStruct.Feature
-		fitAge := extStruct.FitAge
-		filters = filtersPrefix + "area=" + area + "&year=" + year + "&kind=" + kind + "&chargeInfo=" + chargeInfo + "&sort=" + sort + "&edition=" + edition + "&feature=" + feature + "&fitAge=" + fitAge
-
+		fmt.Printf("%#v\n", filterMap)
+		for k, v := range filterMap {
+			filter += fmt.Sprintf("%s=%s&", k, v)
+		}
+		if filter != "" {
+			filter = filtersPrefix + filter
+		} else {
+			filter = filtersPrefix + filtersDefault
+		}
 	}
-	return filters
-
+	this.Filters = filter
+	return filter
 }

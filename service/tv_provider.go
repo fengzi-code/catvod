@@ -9,7 +9,7 @@ import (
 type TVProvider interface {
 	GetHome() (res model.HomeContent)
 	GetCategory(typeid string, page int) (res model.Category)
-	// GetFilters(string) string
+	GetFilter(string) string
 	// GetCategory(string, string, string)
 	// GetDetails([]string)
 	// Search(string)

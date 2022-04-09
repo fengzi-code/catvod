@@ -10,6 +10,7 @@ import (
 )
 
 type MGTV struct {
+	Filters string
 }
 
 func (m *MGTV) GetHome() (res model.HomeContent) {

@@ -14,7 +14,8 @@ import (
 */
 
 func (this *QQTV) GetCategory(typeid string, page int) (res model.Category) {
-	url := fmt.Sprintf(baseUrl+"/%s?listpage=%d&channel=%s&_all=1&pagesize=30&sort=19", typeid, page, typeid)
+	fmt.Println("GetCategory", this.Filters)
+	url := fmt.Sprintf(baseUrl+"/%s?listpage=%d&channel=%s&%s", typeid, page, typeid, this.Filters)
 	fmt.Println("分页地址：", url)
 	doc, err := htmlquery.LoadURL(url)
 	if err != nil {

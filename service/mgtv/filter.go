@@ -16,6 +16,12 @@ import (
 
 var filtersPrefix, filtersDefault, filters string
 
+func (m *MGTV) GetFilter(ext string) string {
+	GetFilters(ext)
+	m.Filters = filters
+	return filters
+}
+
 func GetFilters(ext string) string {
 	filtersPrefix = "&pc=20&hudong=1&_support=10000000&" //固定不变格式
 	filtersDefault = "kind=a1&edition=a1&year=all&chargeInfo=a1&sort=c1&feature=all"
@@ -36,6 +42,7 @@ func getChannelId2(ext string) string {
 			log.Fatalln(err)
 		}
 		extDecode := string(decodeBytes) //对解码后的数据转换为字符串格式
+		fmt.Println("getChannelId2", extDecode)
 		var extStruct model.ExtStruct
 
 		err = json.Unmarshal([]byte(extDecode), &extStruct) //对收到的过滤规则反序列化并存到extStruct结构体
