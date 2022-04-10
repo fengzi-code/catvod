@@ -22,8 +22,15 @@ func GetVodInfo(doc *html.Node) (vodInfo []model.VodInfo) {
 		vodPic := htmlquery.InnerText(htmlquery.FindOne(item, "//img[@class='figure_pic']/@src"))
 		vodId := htmlquery.SelectAttr(a, "data-float")
 		vodName := htmlquery.SelectAttr(a, "title")
-		// TODO: 这里还有bug，在纪录片时运行到半路会报错
-		vodRemarks := htmlquery.InnerText(htmlquery.FindOne(item, "//div[@class='figure_caption']"))
+		// 在纪录片时运行到半路会报错，因为没有这个figure_caption节点
+		// 所以在取InnerText时需要提前判断一下*html.Node是否为nil
+		remarkNode := htmlquery.FindOne(item, "//div[@class='figure_caption']")
+		var vodRemarks string
+		if remarkNode != nil { // 这里需要判断一下，否则没有这个元素会报错
+			vodRemarks = htmlquery.InnerText(remarkNode)
+		} else {
+			vodRemarks = ""
+		}
 		if strings.HasPrefix(vodPic, "//") {
 			vodPic = strings.Replace(vodPic, "//", "https://", 1)
 		} else if strings.TrimSpace(vodPic) == "" {
