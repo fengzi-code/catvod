@@ -2,6 +2,7 @@ package main
 
 import (
 	"catvod/route"
+	"flag"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,6 +16,10 @@ func main() {
 	gin.SetMode(gin.DebugMode)
 	// 2.设置路由
 	r := route.SetupRouter()
+	// 从flag接收端口号
+	var port string
+	flag.StringVar(&port, "port", "8080", "端口号")
+	flag.Parse()
 	// 3.启动服务
-	r.Run(":8080")
+	r.Run(":" + port)
 }
