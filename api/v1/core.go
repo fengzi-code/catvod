@@ -62,10 +62,11 @@ func CoreHandler(ctx *gin.Context) {
 		// https://xxx.xX.xx?ac=detail&quick=是否快搜&wd=搜索词
 		fmt.Println("走搜索程序")
 		fmt.Println(wd) // 传过来的ids为字符串数组
+		data := tv.Search(wd)
 		ctx.JSON(200, gin.H{
 			"code":    0,
 			"message": "走搜索程序",
-			"data":    "tv provider: " + tvProvider,
+			"list":    data,
 		})
 	} else {
 		fmt.Println("走首页程序")

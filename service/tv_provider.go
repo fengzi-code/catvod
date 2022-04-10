@@ -10,7 +10,7 @@ type TVProvider interface {
 	GetCategory(typeid string, page int) (res model.Category)
 	GetFilter(string) string
 	GetDetails([]string) (res []model.VodDetail)
-	// Search(string)
+	Search(string) (res []model.VodInfo)
 }
 
 func NewTVProvider(p string) TVProvider {
