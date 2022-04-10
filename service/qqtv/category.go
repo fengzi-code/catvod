@@ -24,11 +24,15 @@ func (this *QQTV) GetCategory(typeid string, page int) (res model.Category) {
 
 	res.Page = page
 	res.Limit = 30
-	totalText := htmlquery.FindOne(doc, "//div[@class='mod_list_filter']/div[@class='filter_result ']")
+	// totalText := htmlquery.FindOne(doc, "//div[@class='mod_list_filter']/div[@class='filter_result ']")
 	var totalstr, pageCount string
-
-	totalstr = htmlquery.SelectAttr(totalText, "data-total")
-	pageCount = htmlquery.SelectAttr(totalText, "data-pagemax")
+	pageButtonNodes := htmlquery.Find(doc, "//div[@class='mod_pages']/button[contains(@class, 'page_num')]")
+	if len(pageButtonNodes) > 0 {
+		pageCount = htmlquery.InnerText(pageButtonNodes[len(pageButtonNodes)-1])
+		totalstr = htmlquery.SelectAttr(pageButtonNodes[len(pageButtonNodes)-1], "data-offset")
+	}
+	// totalstr = htmlquery.SelectAttr(totalText, "data-total")
+	// pageCount = htmlquery.SelectAttr(totalText, "data-pagemax")
 	total, _ := strconv.Atoi(totalstr)
 	pageMax, _ := strconv.Atoi(pageCount)
 	if total <= 0 {
@@ -44,6 +48,7 @@ func (this *QQTV) GetCategory(typeid string, page int) (res model.Category) {
 	res.VodList = GetVodInfo(doc)
 	if len(res.VodList) > 0 {
 		res.Code = 0
+		res.Total += len(res.VodList)
 		res.Msg = "success"
 	} else {
 		res.Code = -1
