@@ -12,9 +12,9 @@ import (
 */
 const cateGoryApi = "https://v.qq.com/x/bu/pagesheet/list?append=1&channel=%s&listpage=1&offset=%d&pagesize=30&%s"
 
-func (this *QQTV) GetCategory(typeid string, page int) (res model.Category) {
+func (this *QQTV) GetCategory(typeId string, page int) (res model.Category) {
 	fmt.Println("GetCategory", this.Filters)
-	url := fmt.Sprintf(cateGoryApi, typeid, (page-1)*30, this.Filters)
+	url := fmt.Sprintf(cateGoryApi, typeId, (page-1)*30, this.Filters)
 	fmt.Println("分页地址：", url)
 	doc, err := htmlquery.LoadURL(url)
 	if err != nil {
