@@ -29,7 +29,6 @@ func (this *MGTV) GetFilter(ext string) (filter string) {
 			log.Println("json unmarshal error:", err)
 			return filtersPrefix + filtersDefault
 		}
-		fmt.Printf("%#v\n", filterMap)
 		for k, v := range filterMap {
 			filter += fmt.Sprintf("%s=%s&", k, v)
 		}

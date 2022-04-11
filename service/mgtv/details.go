@@ -13,22 +13,24 @@ import (
 	"strings"
 )
 
+const (
+	detailApi   = "https://pcweb.api.mgtv.com/video/info?vid=%s"
+	episodesApi = "https://pcweb.api.mgtv.com/episode/list?&video_id=%s&page=%d&page_size=%d"
+)
+
 func (this *MGTV) GetDetails(ids []string) (res []model.VodDetail) {
-	headers := map[string]string{
-		"User-Agent":   global.UserAgent,
-		"Content-Type": global.ContentType,
-	}
 	mgtvurl := "https://www.mgtv.com"
 	// 循环读取所有的ids详情
-	for _, x := range ids {
+	for _, id := range ids {
 		client := resty.New()
 		get, err := client.R().
 			SetResult(response.Detail{}). //返回的json存到model.Detail结构体
-			ForceContentType("application/json").
-			SetHeaders(headers).
-			Get("https://pcweb.api.mgtv.com/video/info?vid=" + x)
+			ForceContentType(global.JsonType).
+			SetHeaders(global.Headers).
+			Get(fmt.Sprintf(detailApi, id))
 		if err != nil {
-			fmt.Println("ddddddd")
+			fmt.Println(err)
+			continue
 		}
 		c := get.Result().(*response.Detail)
 		var detail model.VodDetail
@@ -45,11 +47,12 @@ func (this *MGTV) GetDetails(ids []string) (res []model.VodDetail) {
 		detail.VodPlayFrom = "mgtv"
 		get, err = client.R().
 			SetResult(response.PlayUrl{}).
-			ForceContentType("application/json").
-			SetHeaders(headers).
-			Get("https://pcweb.api.mgtv.com/episode/list?&video_id=" + x + "&page=0&size=30")
+			ForceContentType(global.JsonType).
+			SetHeaders(global.Headers).
+			Get(fmt.Sprintf(episodesApi, id, 0, 30))
 		if err != nil {
-			fmt.Println("ddddddd")
+			fmt.Println(err)
+			continue
 		}
 		// 取页数
 		b := get.Result().(*response.PlayUrl)
@@ -62,23 +65,19 @@ func (this *MGTV) GetDetails(ids []string) (res []model.VodDetail) {
 		var playurlList []string
 		// 由于每次只能返回30个数据,所有要判断视频集数再循环多次取数据
 		for i := 1; i < pageTotal+1; i++ {
-			y := strconv.Itoa(i)
-			fmt.Println("+++++++++++", y)
-			fmt.Println("https://pcweb.api.mgtv.com/episode/list?&video_id=" + x + "&page=" + y + "&size=30")
 			get, err = client.R().
 				SetResult(response.PlayUrl{}).
-				ForceContentType("application/json").
-				SetHeaders(headers).
-				Get("https://pcweb.api.mgtv.com/episode/list?&video_id=" + x + "&page=" + y + "&size=30")
+				ForceContentType(global.JsonType).
+				SetHeaders(global.Headers).
+				Get(fmt.Sprintf(episodesApi, id, i, 30))
 			if err != nil {
-				fmt.Println("ddddddd")
+				continue
 			}
 			too := get.Result().(*response.PlayUrl)
 
 			for _, x := range too.Data.List {
 				// 清除预告片
 				hzRegexp, _ := regexp.Compile("([\u4e00-\u9fa5]+)")
-
 				if hzRegexp.MatchString(x.T1) { //如果T1有中文则用T1
 					if x.Corner[0].Font != "预" {
 						playurlList = append(playurlList, x.T1+"$"+mgtvurl+x.Url+"#")

@@ -1,6 +1,7 @@
 package qqtv
 
 import (
+	"catvod/global"
 	"catvod/model"
 	"catvod/utils"
 	"fmt"
@@ -34,7 +35,7 @@ func (this *QQTV) GetHome() (res model.HomeContent) {
 
 	res.VodClass = make([]model.VodClass, 0)
 	res.VodList = make([]model.VodInfo, 0)
-	classJsonFile := "static/qqtv/class.json"
+	classJsonFile := global.QQStaticDir + "/class.json"
 
 	exist, err := utils.PathExists(classJsonFile)
 	if !exist {
@@ -48,7 +49,7 @@ func (this *QQTV) GetHome() (res model.HomeContent) {
 	res.VodClass = this.VodClass
 	this.FilterMap = make(model.FilterMap)
 	// 如果filter文件存在就读文件，不存在则创建并写入
-	filterJsonFile := "static/qqtv/filters.json"
+	filterJsonFile := global.QQStaticDir + "/filters.json"
 	exist, err = utils.PathExists(filterJsonFile)
 	if !exist {
 		for _, t := range this.VodClass {

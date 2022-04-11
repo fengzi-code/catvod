@@ -33,7 +33,6 @@ func CoreHandler(ctx *gin.Context) {
 		filters := tv.GetFilter(ext)
 		fmt.Println("CoreHandler", filters)
 		data := tv.GetCategory(t, pgInt)
-		fmt.Println(data)
 		ctx.JSON(200, data)
 	} else if ok2 {
 		fmt.Println("走播放程序")

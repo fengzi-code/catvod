@@ -12,17 +12,13 @@ import (
 const cateGoryApi = "https://pianku.api.mgtv.com/rider/list/pcweb/v3?platform=pcweb&channelId=%s&pn=%d&%s"
 
 func (this *MGTV) GetCategory(typeId string, page int) (res model.Category) {
-	headers := map[string]string{
-		"User-Agent":   global.UserAgent,
-		"Content-Type": global.ContentType,
-	}
 	url := fmt.Sprintf(cateGoryApi, typeId, (page-1)*30, this.Filters)
 	fmt.Println("分页地址：", url)
 	client := resty.New()
 	get, err := client.R().
 		SetResult(response.Category{}). //model.Category结构体用来存储返回的json数据
-		ForceContentType("application/json").
-		SetHeaders(headers).
+		ForceContentType(global.JsonType).
+		SetHeaders(global.Headers).
 		// 从芒果api中取分类页中的数据
 		Get(url)
 	if err != nil {

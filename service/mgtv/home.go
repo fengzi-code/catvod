@@ -18,22 +18,18 @@ type MGTV struct {
 
 func (this *MGTV) GetHome() (res model.HomeContent) {
 	this.Channel = "2"
-	headers := map[string]string{
-		"User-Agent":   global.UserAgent,
-		"Content-Type": global.ContentType,
-	}
 	client := resty.New()
 	get, err := client.R().
 		SetResult(response.Homelist{}).
-		ForceContentType("application/json").
-		SetHeaders(headers).
-		Get("https://rc.mgtv.com/pc/rank?allowedRC=0&t=day&c=2,3&limit=20&_support=10000000")
+		ForceContentType(global.JsonType).
+		SetHeaders(global.Headers).
+		Get(global.MgHomeApi)
 	if err != nil {
 		return
 	}
 	c := get.Result().(*response.Homelist)
 	res.VodClass = make([]model.VodClass, 0)
-	classJsonFile := "static/mgtv/class.json"
+	classJsonFile := global.MgStaticDir + "/class.json"
 	exist, err := utils.PathExists(classJsonFile)
 	if !exist {
 		// TODO: 补充不存在时从网络上获取并写到本地的逻辑
@@ -42,7 +38,7 @@ func (this *MGTV) GetHome() (res model.HomeContent) {
 	this.VodClass = utils.LoadClassJson(classJsonFile)
 	res.VodClass = this.VodClass
 	this.FilterMap = make(model.FilterMap)
-	filterJsonFile := "static/mgtv/filters.json"
+	filterJsonFile := global.MgStaticDir + "/filters.json"
 	exist, err = utils.PathExists(filterJsonFile)
 	if !exist {
 		// TODO: 补充不存在时从网络上获取并写到本地的逻辑

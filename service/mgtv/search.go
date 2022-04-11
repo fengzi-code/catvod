@@ -10,18 +10,16 @@ import (
 	"strconv"
 )
 
+const searchApi = "https://mobileso.bz.mgtv.com/pc/search/v1?allowedRC=1&q=%s&pn=1&pc=10&uid=&_support=10000000&source=imgo"
+
 func (this *MGTV) Search(wd string) (res []model.VodInfo) {
 	wd = url.QueryEscape(wd)
-	headers := map[string]string{
-		"User-Agent":   global.UserAgent,
-		"Content-Type": global.ContentType,
-	}
 	client := resty.New()
 	get, err := client.R().
 		SetResult(response.SoStruct{}).
-		ForceContentType("application/json").
-		SetHeaders(headers).
-		Get("https://mobileso.bz.mgtv.com/pc/search/v1?allowedRC=1&q=" + wd + "&pn=1&pc=10&uid=&_support=10000000&source=imgo")
+		ForceContentType(global.JsonType).
+		SetHeaders(global.Headers).
+		Get(fmt.Sprintf(searchApi, wd))
 	if err != nil {
 		fmt.Println(err)
 		return
