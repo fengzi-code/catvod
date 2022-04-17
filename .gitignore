@@ -20,4 +20,5 @@
 
 *.exe
 *.iml
-test/
+tmp/
+logs/
