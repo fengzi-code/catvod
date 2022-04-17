@@ -99,7 +99,10 @@ func (this *QQTV) Search(wd string) (res []model.VodInfo) {
 		if !strings.Contains(vodName, wd) && skip {
 			continue
 		}
-
+		// 如果url中带redirect，则跳过
+		if strings.Contains(item.VideoInfo.Url, "search_redirect") {
+			continue
+		}
 		vodName = strings.Replace(vodName, "\u0005", "", -1)
 		vodName = strings.Replace(vodName, "\u0006", "", -1)
 		// 去掉空格
@@ -110,11 +113,6 @@ func (this *QQTV) Search(wd string) (res []model.VodInfo) {
 			vodName = fmt.Sprintf("%s-(%s)", vodName, item.VideoInfo.Language)
 		}
 		vodPic = item.VideoInfo.ImgUrl
-		if item.VideoInfo.ImgTag != "" {
-			fmt.Printf("%+v\n", item.VideoInfo.ImgTag)
-			i1, ok := item.VideoInfo.ImgTag.(response.ImgTag)
-			fmt.Printf("%+v, %+v\n", i1, ok)
-		}
 
 		// TODO: vodRemarks原本是打算从item.VideoInfo.ImgTag中的Tag3.Text取，但是有的结果没有
 		vodRemarks = "qqtv"
