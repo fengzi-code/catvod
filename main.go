@@ -1,8 +1,11 @@
 package main
 
 import (
+	"catvod/global"
 	"catvod/route"
+	"catvod/utils"
 	"flag"
+	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,14 +15,29 @@ import (
 //go:generate go mod download
 
 func main() {
-	// 1.设置为调试模式，默认就是这个模式
-	gin.SetMode(gin.DebugMode)
+	// 1.设置gin模式，默认debug模式
+	// 从flag接收端口号
+	var (
+		port string
+		mode string
+		ip   string
+	)
+	flag.StringVar(&port, "port", "8080", "端口号")
+	flag.StringVar(&mode, "mode", "debug", "gin模式，可选debug,release, 默认debug")
+	flag.Parse()
+	if mode == "release" {
+		gin.SetMode(gin.ReleaseMode)
+		ip = utils.GetExternalIp()
+	} else {
+		ip = utils.GetInternalIp()
+	}
+	fmt.Printf("当前模式：%s\n", gin.Mode())
 	// 2.设置路由
 	r := route.SetupRouter()
-	// 从flag接收端口号
-	var port string
-	flag.StringVar(&port, "port", "8080", "端口号")
-	flag.Parse()
+	fmt.Printf("当前IP：%s\n", ip)
+	if ip != "" {
+		global.BindAddr = fmt.Sprintf("%s:%s", ip, port)
+	}
 	// 3.启动服务
 	r.Run(":" + port)
 }

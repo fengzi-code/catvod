@@ -22,3 +22,5 @@
 *.iml
 tmp/
 logs/
+catvod
+catvod.exe

@@ -8,4 +8,5 @@ var (
 		"origin":       "",
 		"referer":      "",
 	}
+	BindAddr string
 )

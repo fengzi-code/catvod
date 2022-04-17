@@ -18,6 +18,7 @@ func init() {
 
 func SetupRouter() *gin.Engine {
 	Router.GET("/", v1.GetIndex)
+	Router.GET("/config", v1.GetConfig) // 动态配置接口
 	Router.GET("/api/v1/:tv", v1.CoreHandler)
 	return Router
 }
