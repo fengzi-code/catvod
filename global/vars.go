@@ -5,5 +5,7 @@ var (
 	Headers = map[string]string{
 		"User-Agent":   UserAgent,
 		"Content-Type": ContentType,
+		"origin":       "",
+		"referer":      "",
 	}
 )

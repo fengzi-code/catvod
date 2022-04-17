@@ -20,4 +20,4 @@
 
 *.exe
 *.iml
-static/
+test/

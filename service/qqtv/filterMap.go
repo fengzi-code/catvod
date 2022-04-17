@@ -28,16 +28,20 @@ func (this *QQTV) GetFilterMap(t string) {
 		for _, filterValueNode := range filterValueNodes {
 			filterValueName := htmlquery.InnerText(filterValueNode)
 			filterValueId := htmlquery.SelectAttr(filterValueNode, "data-value")
-			filterValues = append(filterValues, model.FilterValueItems{
-				ShowName: filterValueName,
-				UrlValue: filterValueId,
-			})
+			filterValues = append(
+				filterValues, model.FilterValueItems{
+					ShowName: filterValueName,
+					UrlValue: filterValueId,
+				},
+			)
 		}
-		filts = append(filts, model.Filter{
-			Name:  filterName,
-			Key:   filterKey,
-			Value: filterValues,
-		})
+		filts = append(
+			filts, model.Filter{
+				Name:  filterName,
+				Key:   filterKey,
+				Value: filterValues,
+			},
+		)
 	}
 
 	this.FilterMap[t] = filts

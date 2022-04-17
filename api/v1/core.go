@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"catvod/global"
 	"catvod/service"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -39,7 +40,7 @@ func CoreHandler(ctx *gin.Context) {
 		fmt.Println(play)
 		ctx.JSON(
 			http.StatusOK,
-			gin.H{"code": 0, "playUrl": "https://jx.blbo.cc:4433/?url=", "url": play, "parse": 1, "header": ""},
+			gin.H{"code": 0, "playUrl": "https://jx.blbo.cc:4433/?url=", "url": play, "parse": 1, "header": global.Headers},
 		)
 	} else if ok3 {
 		fmt.Println("走详情程序")
@@ -64,6 +65,7 @@ func CoreHandler(ctx *gin.Context) {
 		data := tv.Search(wd)
 		ctx.JSON(200, gin.H{
 			"code":    0,
+			"total":   len(data),
 			"message": "走搜索程序",
 			"list":    data,
 		})

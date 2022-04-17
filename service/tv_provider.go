@@ -2,6 +2,7 @@ package service
 
 import (
 	"catvod/model"
+	"catvod/service/iqytv"
 	"catvod/service/mgtv"
 	"catvod/service/qqtv"
 )
@@ -18,10 +19,10 @@ func NewTVProvider(p string) TVProvider {
 	switch p {
 	case "qqtv":
 		return &qqtv.QQTV{}
-	case "mgtest":
-		return &mgtv.MGTV{}
 	case "mgtv":
 		return &mgtv.MGTV{}
+	case "iqiyi":
+		return &iqytv.IQYTV{}
 	default:
 		return &qqtv.QQTV{}
 	}

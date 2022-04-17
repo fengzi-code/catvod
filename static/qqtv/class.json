@@ -1,0 +1,38 @@
+[
+  {
+    "type_id": "choice",
+    "type_name": "精选"
+  },
+  {
+    "type_id": "tv",
+    "type_name": "电视剧"
+  },
+  {
+    "type_id": "movie",
+    "type_name": "电影"
+  },
+  {
+    "type_id": "variety",
+    "type_name": "综艺"
+  },
+  {
+    "type_id": "cartoon",
+    "type_name": "动漫"
+  },
+  {
+    "type_id": "child",
+    "type_name": "少儿"
+  },
+  {
+    "type_id": "doco",
+    "type_name": "纪录片"
+  },
+  {
+    "type_id": "music",
+    "type_name": "音乐"
+  },
+  {
+    "type_id": "nba",
+    "type_name": "NBA"
+  }
+]

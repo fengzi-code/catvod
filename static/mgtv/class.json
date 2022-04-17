@@ -1,0 +1,30 @@
+[
+  {
+    "type_id": "2",
+    "type_name": "电视剧"
+  },
+  {
+    "type_id": "3",
+    "type_name": "电影"
+  },
+  {
+    "type_id": "1",
+    "type_name": "综艺"
+  },
+  {
+    "type_id": "10",
+    "type_name": "少儿"
+  },
+  {
+    "type_id": "50",
+    "type_name": "动漫"
+  },
+  {
+    "type_id": "51",
+    "type_name": "纪录片"
+  },
+  {
+    "type_id": "116",
+    "type_name": "游戏"
+  }
+]

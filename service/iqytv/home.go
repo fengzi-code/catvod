@@ -6,8 +6,10 @@ import (
 	"catvod/model/iqy/response"
 	"catvod/utils"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"github.com/go-resty/resty/v2"
+	"io/ioutil"
 	"strconv"
 )
 
@@ -41,21 +43,45 @@ func (this *IQYTV) GetHome() (res model.HomeContent) {
 	}
 	this.VodClass = utils.LoadClassJson(classJsonFile)
 	res.VodClass = this.VodClass
-	// this.FilterMap = make(model.FilterMap)
-	// filterJsonFile := global.MgStaticDir + "/filters.json"
-	// exist, err = utils.PathExists(filterJsonFile)
-	// if !exist {
-	// 	// TODO: 补充不存在时从网络上获取并写到本地的逻辑
-	// 	return
-	// }
-	// this.FilterMap = utils.LoadFilterJson(filterJsonFile)
-	// res.Filters = this.FilterMap
+	this.FilterMap = make(model.FilterMap)
+
+	filterJsonFile := global.IQYStaticDir + "/filters.json"
+	exist, err = utils.PathExists(filterJsonFile)
+	if !exist {
+		//Iqiyiglobal.FilterMap = make(model.FilterMap)
+		var year bool
+		var comic bool
+		FilterMap := make(model.FilterMap)
+		for _, t := range res.VodClass {
+			if t.TypeId == "2" || t.TypeId == "1" {
+				year = true
+			}
+			if t.TypeId == "4" {
+				comic = true
+			}
+			filters := getiqiyiFilter(t.TypeId, global.IqiyiFilterBaseurl+t.TypeId+global.IqiyiFilterbaseEndUrl, comic, year)
+			year = false
+			comic = false
+			FilterMap[t.TypeId] = filters
+		}
+
+		marshal, err := json.Marshal(FilterMap)
+		if err != nil {
+			fmt.Println("ddddddddd")
+		}
+		err = ioutil.WriteFile(filterJsonFile, marshal, 0644)
+		if err != nil {
+			panic(err)
+		}
+	}
+	this.FilterMap = utils.LoadFilterJson(filterJsonFile)
+	res.Filters = this.FilterMap
 	res.VodList = make([]model.VodInfo, 0)
 	for _, v := range c.Data.List {
 		b2 := v.AlbumId
 		b := strconv.FormatInt(b2, 10)
-		c := strconv.Itoa(v.ChannelId)
-		d := base64.StdEncoding.EncodeToString([]byte(b + "|" + c + "|" + v.Name + "|" + v.ImageUrl))
+		cc := strconv.Itoa(v.ChannelId)
+		d := base64.StdEncoding.EncodeToString([]byte(b + "|" + cc + "|" + v.Name + "|" + v.ImageUrl))
 		res.VodList = append(res.VodList, model.VodInfo{
 			VodId:      d,
 			VodName:    v.Name,
