@@ -32,9 +32,9 @@ func main() {
 		ip = utils.GetInternalIp()
 	}
 	fmt.Printf("当前模式：%s\n", gin.Mode())
+	fmt.Printf("当前接口对外IP：%s\n", ip)
 	// 2.设置路由
 	r := route.SetupRouter()
-	fmt.Printf("当前IP：%s\n", ip)
 	if ip != "" {
 		global.BindAddr = fmt.Sprintf("%s:%s", ip, port)
 	}

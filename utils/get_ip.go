@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"github.com/go-resty/resty/v2"
 	"net"
 )
@@ -30,18 +31,26 @@ func GetExternalIp() (res string) {
 
 // 获取本机内网IP
 func GetInternalIp() (res string) {
-	addrs, err := net.InterfaceAddrs()
+	res = GetIpFromUdpNetDial()
+	return
+}
+
+/*
+GetIpFromUdpNetDial
+获取到当前机器的主IP，由于使用的是UDP协议，不会需要握手，所以不需要担心访问不到8.8.8.8:8
+或者这样说，这里随便填一个IP地址都可以，反正不会去访问
+*/
+func GetIpFromUdpNetDial() (res string) {
+	conn, err := net.Dial("udp", "8.8.8.8:8")
 	if err != nil {
+		fmt.Printf("net.Dial err: %v\n", err)
 		return
 	}
-	for _, address := range addrs {
-		// 检查ip地址判断是否回环地址
-		if ipnet, ok := address.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
-			if ipnet.IP.To4() != nil {
-				res = ipnet.IP.String()
-				return
-			}
-		}
+	defer conn.Close()
+	localAddr := conn.LocalAddr().(*net.UDPAddr)
+	if localAddr.IP.To4() == nil {
+		return
 	}
+	res = localAddr.IP.To4().String()
 	return
 }
