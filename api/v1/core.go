@@ -1,8 +1,8 @@
 package v1
 
 import (
-	"catvod/global"
 	"catvod/service"
+	"catvod/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -38,10 +38,9 @@ func CoreHandler(ctx *gin.Context) {
 	} else if ok2 {
 		fmt.Println("走播放程序")
 		fmt.Println(play)
-		ctx.JSON(
-			http.StatusOK,
-			gin.H{"code": 0, "playUrl": "https://jx.blbo.cc:4433/?url=", "url": play, "parse": 1, "header": global.Headers},
-		)
+		data := utils.GetPlayUrl(play)
+		fmt.Printf("%+v\n", data)
+		ctx.JSON(http.StatusOK, data)
 	} else if ok3 {
 		fmt.Println("走详情程序")
 		fmt.Println(ids) // 传过来的ids为字符串数组

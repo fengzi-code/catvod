@@ -1,0 +1,51 @@
+[
+  {
+    "name": "首选接口",
+    "scope": "all",
+    "url": "https://svip.rongxingvr.top/api/?key=Wyl9CjTyelP0UOaECD&url=",
+    "weight": 100,
+    "parse": 0
+  },
+  {
+    "name": "备用",
+    "scope": "all",
+    "url": "https://svip.rongxingvr.top/api/?key=niBgMGXVdCQhsmeEBK&url=",
+    "weight": 90,
+    "parse": 0
+  },
+  {
+    "name": "备用-喵派对蓝光解析",
+    "scope": "all",
+    "url": "https://svip.iremind.me/api/?key=LWYifrJ9QrCCrtn06g&url=",
+    "weight": 80,
+    "parse": 0
+  },
+  {
+    "name": "备用-木白解析",
+    "scope": "all",
+    "url": "https://vip.23at.cn/home/api?type=ys&uid=4883852&key=adfimsvxzDKNOVX389&url=",
+    "weight": 80,
+    "parse": 0
+  },
+  {
+    "name": "备用-灯塔解析",
+    "scope": "all",
+    "url": "https://jx.mczdyw.com/xg.php?url=",
+    "weight": 80,
+    "parse": 0
+  },
+  {
+    "name": "备用-爱奇艺解析",
+    "scope": "all",
+    "url": "https://svip.spchat.top/api/?key=bKemW41JnxmQb4l67h&url=",
+    "weight": 80,
+    "parse": 0
+  },
+  {
+    "name": "备用-灯塔解析",
+    "scope": "all",
+    "url": "http://www.hwh.ink/home/api?type=ys&uid=4862348&key=bhinsxzCHIJKNSUXZ3&url=",
+    "weight": 10,
+    "parse": 0
+  }
+]
