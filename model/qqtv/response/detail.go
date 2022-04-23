@@ -1,4 +1,4 @@
-package qqtv
+package response
 
 type CoverInfo struct {
 	Id                     string      `json:"id"`

@@ -2,7 +2,7 @@ package qqtv
 
 import (
 	"catvod/model"
-	"catvod/model/qqtv"
+	"catvod/model/qqtv/response"
 	"encoding/json"
 	"fmt"
 	"github.com/antchfx/htmlquery"
@@ -26,7 +26,7 @@ func (this *QQTV) GetDetails(ids []string) (res []model.VodDetail) {
 			return
 		}
 		// json文件转结构体
-		var coverInfo qqtv.CoverInfo
+		var coverInfo response.CoverInfo
 		err = json.Unmarshal([]byte(coverInfoStrArr[1]), &coverInfo)
 		if err != nil {
 			fmt.Println(err)
@@ -44,8 +44,13 @@ func (this *QQTV) GetDetails(ids []string) (res []model.VodDetail) {
 		detail.VodDirector = strings.Join(coverInfo.Director, ",")
 		detail.VodContent = coverInfo.Description
 		detail.VodPlayFrom = "qqtv"
-		for k, v := range coverInfo.VideoIds {
-			detail.VodPlayUrl += fmt.Sprintf("第%d集$%s/%s/%s.html#", k+1, detailUrlPrefix, id, v)
+		count := 0
+		for _, v := range coverInfo.NomalIds {
+			if v.F == 0 || v.F == 4 { // F=0或4的为预告，2为免费，7为VIP
+				continue
+			}
+			count += 1 // 去掉预告来计数，避免集数对不上
+			detail.VodPlayUrl += fmt.Sprintf("第%d集$%s/%s/%s.html#", count, detailUrlPrefix, id, v.V)
 		}
 		if strings.HasSuffix(detail.VodPlayUrl, "#") {
 			detail.VodPlayUrl = detail.VodPlayUrl[:len(detail.VodPlayUrl)-1]
