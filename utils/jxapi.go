@@ -3,11 +3,10 @@ package utils
 import (
 	"catvod/global"
 	"catvod/model"
-	"encoding/json"
 	"fmt"
+	"github.com/fsnotify/fsnotify"
 	"github.com/go-resty/resty/v2"
-	"io/ioutil"
-	"os"
+	"github.com/spf13/viper"
 	"sort"
 )
 
@@ -35,31 +34,36 @@ func (s JxApis) Less(i, j int) bool {
 	return s[i].Weight < s[j].Weight
 }
 
+type Apis struct {
+	Apis JxApis `json:"apis"`
+}
+
 func init() {
-	filePtr, err := os.Open("jxapi/jxapi.json")
+	v := viper.New()
+	v.SetConfigFile("jxapi/jxapi.json")
+	v.SetConfigType("json")
+	err := v.ReadInConfig()
 	if err != nil {
-		fmt.Printf("Open file failed [Err:%s]\n", err.Error())
-		return
+		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
-	defer func() {
-		err = filePtr.Close()
-		if err != nil {
+	v.WatchConfig()
+	var apis Apis
+	v.OnConfigChange(func(e fsnotify.Event) {
+		fmt.Println("config file changed:", e.Name)
+		if err := v.Unmarshal(&apis); err != nil {
 			fmt.Println(err)
 		}
-	}()
-	bytes, err := ioutil.ReadAll(filePtr)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	err = json.Unmarshal(bytes, &JxApiList)
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		// 对读到的解析接口按权重倒序排序
+		JxApiList = apis.Apis
 		sort.Stable(sort.Reverse(JxApiList))
-		fmt.Printf("解析Api列表: %+v\n", JxApiList)
+		fmt.Printf("文件改变后，解析Api列表: %+v\n", JxApiList)
+	})
+	if err := v.Unmarshal(&apis); err != nil {
+		fmt.Println(err)
 	}
+	JxApiList = apis.Apis
+	sort.Stable(sort.Reverse(JxApiList))
+	fmt.Printf("解析Api列表: %+v\n", JxApiList)
+
 }
 
 type JxApiResponse struct {

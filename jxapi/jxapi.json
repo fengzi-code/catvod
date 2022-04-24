@@ -1,23 +1,24 @@
-[
+{
+  "apis": [
   {
     "name": "首选接口",
     "scope": "all",
     "url": "https://svip.rongxingvr.top/api/?key=Wyl9CjTyelP0UOaECD&url=",
-    "weight": 100,
+    "weight": 90,
     "parse": 0
   },
   {
     "name": "备用",
     "scope": "all",
     "url": "https://svip.rongxingvr.top/api/?key=niBgMGXVdCQhsmeEBK&url=",
-    "weight": 90,
+    "weight": 100,
     "parse": 0
   },
   {
     "name": "备用-喵派对蓝光解析",
     "scope": "all",
     "url": "https://svip.iremind.me/api/?key=LWYifrJ9QrCCrtn06g&url=",
-    "weight": 80,
+    "weight": 800,
     "parse": 0
   },
   {
@@ -48,4 +49,5 @@
     "weight": 10,
     "parse": 0
   }
-]
+  ]
+}
