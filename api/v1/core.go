@@ -16,14 +16,15 @@ func CoreHandler(ctx *gin.Context) {
 	t, ok1 := ctx.GetQuery("t")       // 有t参数时走分类程序
 	play, ok2 := ctx.GetQuery("play") // 有play参数时走播放程序
 	ids, ok3 := ctx.GetQuery("ids")   // 有ids参数时走详情程序
-	wd, ok4 := ctx.GetQuery("wd")     // 有ids参数时走详情程序
+	wd, ok4 := ctx.GetQuery("wd")     // 有wd参数时走搜索程序
 	fmt.Printf("%s,%v,%v,%v,%v\n", tvProvider, t, play, ids, wd)
 	tv := service.NewTVProvider(tvProvider)
-	if ok1 {
+
+	switch {
+	case ok1:
 		fmt.Println("走分类程序", t)
 		pg := ctx.DefaultQuery("pg", "1")
 		ext := ctx.DefaultQuery("ext", "")
-		fmt.Println(pg, ext)
 		pgInt, err := strconv.Atoi(pg)
 		if err != nil {
 			pgInt = 1
@@ -35,15 +36,11 @@ func CoreHandler(ctx *gin.Context) {
 		fmt.Println("CoreHandler", filters)
 		data := tv.GetCategory(t, pgInt)
 		ctx.JSON(200, data)
-	} else if ok2 {
-		fmt.Println("走播放程序")
-		fmt.Println(play)
+	case ok2:
 		data := utils.GetPlayUrl(play)
 		fmt.Printf("%+v\n", data)
 		ctx.JSON(http.StatusOK, data)
-	} else if ok3 {
-		fmt.Println("走详情程序")
-		fmt.Println(ids) // 传过来的ids为字符串数组
+	case ok3:
 		idsArr := make([]string, 0)
 		if strings.Contains(ids, ",") {
 			idsArr = strings.Split(ids, ",")
@@ -52,26 +49,13 @@ func CoreHandler(ctx *gin.Context) {
 		}
 		fmt.Println("视频ID数组", idsArr)
 		data := tv.GetDetails(idsArr)
-		ctx.JSON(200, gin.H{
-			"code":    0,
-			"message": "走详情程序",
-			"list":    data,
-		})
-	} else if ok4 {
-		// https://xxx.xX.xx?ac=detail&quick=是否快搜&wd=搜索词
-		fmt.Println("走搜索程序")
-		fmt.Println(wd) // 传过来的ids为字符串数组
+		ctx.JSON(200, gin.H{"code": 0, "message": "走详情程序", "list": data})
+	case ok4:
 		data := tv.Search(wd)
-		ctx.JSON(200, gin.H{
-			"code":    0,
-			"total":   len(data),
-			"message": "走搜索程序",
-			"list":    data,
-		})
-	} else {
+		ctx.JSON(200, gin.H{"code": 0, "total": len(data), "message": "走搜索程序", "list": data})
+	default:
 		fmt.Println("走首页程序")
 		data := tv.GetHome()
 		ctx.JSON(200, data)
 	}
-
 }
