@@ -11,14 +11,14 @@
     "name": "备用",
     "scope": "all",
     "url": "https://svip.rongxingvr.top/api/?key=niBgMGXVdCQhsmeEBK&url=",
-    "weight": 100,
+    "weight": 10,
     "parse": 0
   },
   {
     "name": "备用-喵派对蓝光解析",
     "scope": "all",
     "url": "https://svip.iremind.me/api/?key=LWYifrJ9QrCCrtn06g&url=",
-    "weight": 800,
+    "weight": 80,
     "parse": 0
   },
   {
@@ -48,6 +48,13 @@
     "url": "http://www.hwh.ink/home/api?type=ys&uid=4862348&key=bhinsxzCHIJKNSUXZ3&url=",
     "weight": 10,
     "parse": 0
-  }
+  },
+    {
+      "name": "追剧喵",
+      "scope": "qq,iqiyi",
+      "url": "https://jx.zjmiao.com/?url=",
+      "weight": 100,
+      "parse": 0
+    }
   ]
 }

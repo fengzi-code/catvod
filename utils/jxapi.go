@@ -73,22 +73,28 @@ type JxApiResponse struct {
 // GetPlayUrl 获取播放地址
 func GetPlayUrl(url string) (res model.PlayResponse) {
 	for _, v := range JxApiList { // 轮询法
-		client := resty.New()
+
 		reqUrl := fmt.Sprintf("%s%s", v.Url, url)
-		get, _ := client.R().
-			SetResult(&JxApiResponse{}).
-			SetHeaders(global.Headers).
-			Get(reqUrl)
-		fmt.Printf("请求地址: %s, 请求状态码: %d, 请求结果: %+v\n", reqUrl, get.StatusCode(), get.Result())
-		if get.IsSuccess() {
-			r := get.Result().(*JxApiResponse)
-			if r.Url != "" {
-				res.Url = r.Url
-				res.Header = global.Headers
-				return
+		switch reqUrl {
+		case "https://jx.zjmiao.com/?url=" + url:
+			res.Url = GetZJMiaoUrl(reqUrl)
+			res.Header = global.Headers
+		default:
+			client := resty.New()
+			get, _ := client.R().
+				SetResult(&JxApiResponse{}).
+				SetHeaders(global.Headers).
+				Get(reqUrl)
+			fmt.Printf("请求地址: %s, 请求状态码: %d, 请求结果: %+v\n", reqUrl, get.StatusCode(), get.Result())
+			if get.IsSuccess() {
+				r := get.Result().(*JxApiResponse)
+				if r.Url != "" {
+					res.Url = r.Url
+					res.Header = global.Headers
+				}
 			}
 		}
+		return
 	}
-
 	return
 }
