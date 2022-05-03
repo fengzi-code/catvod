@@ -30,7 +30,8 @@ func GetVodInfo(url string) (vodInfo []model.VodInfo) {
 		fmt.Println(vodPic, vodId, vodName)
 		// 在纪录片时运行到半路会报错，因为没有这个figure_caption节点
 		// 所以在取InnerText时需要提前判断一下*html.Node是否为nil
-		vodRemarks := htmlquery.SelectAttr(a, "//span[@class='pack-prb hidden']")
+		vodRemarksNode := htmlquery.FindOne(a, "span[@class='pack-prb hidden']")
+		vodRemarks := htmlquery.InnerText(vodRemarksNode)
 
 		fmt.Printf("vod_id: %s, vod_name: %s, vod_img: %s\n", vodId, vodName, vodPic)
 		vodInfo = append(vodInfo, model.VodInfo{
