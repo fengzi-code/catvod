@@ -27,11 +27,10 @@ func (this *ZJMIAO) GetDetails(ids []string) (res []model.VodDetail) {
 		}
 		detail.VodName = htmlquery.SelectAttr(vodNameNode, "title")
 		vodPicNode := htmlquery.FindOne(doc, "//div[@class='s-cover box']/a/img")
-		if vodPicNode == nil {
-			fmt.Println("vod pic node is nil")
-			continue
+		if vodPicNode != nil {
+			detail.VodPic = htmlquery.SelectAttr(vodPicNode, "src")
 		}
-		detail.VodPic = htmlquery.SelectAttr(vodPicNode, "src")
+
 		vodRemarksNode := htmlquery.FindOne(doc, "//div[@class='play-detail']/h1/span[@class='remarks']")
 		if vodRemarksNode != nil {
 			detail.VodRemarks = htmlquery.InnerText(vodRemarksNode)
@@ -56,11 +55,9 @@ func (this *ZJMIAO) GetDetails(ids []string) (res []model.VodDetail) {
 			detail.VodYear = htmlquery.InnerText(yearNode)
 		}
 		srcNodes := htmlquery.Find(doc, "//a[contains(@class, 'channelname')]")
-		var srcs []string
 		for _, srcNode := range srcNodes {
 			src := htmlquery.InnerText(srcNode)
 			src = strings.Trim(src, "&nbsp;")
-			srcs = append(srcs, src)
 			detail.VodPlayFrom += src + "$$$"
 		}
 		detail.VodPlayFrom = strings.TrimSuffix(detail.VodPlayFrom, "$$$")
