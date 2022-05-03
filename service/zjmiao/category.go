@@ -42,7 +42,7 @@ func (this *ZJMIAO) GetCategory(typeId string, page int) (res model.Category) {
 		if vodUrl == "" {
 			continue
 		}
-		vodUrl = "https://zjmiao.com" + vodUrl
+		vodId := utils.GetBetweenStr(vodUrl, "id/", "/")
 		vodImgNode := htmlquery.FindOne(vodNode, "//div[@class='bj eclazy']")
 		if vodImgNode == nil {
 			continue
@@ -57,7 +57,7 @@ func (this *ZJMIAO) GetCategory(typeId string, page int) (res model.Category) {
 		}
 		vodInfo := model.VodInfo{
 			VodName:    vodName,
-			VodId:      vodUrl,
+			VodId:      vodId,
 			VodPic:     vodImg,
 			VodRemarks: vodRemark,
 		}
