@@ -1,0 +1,30 @@
+[
+  {
+    "type_id": "1",
+    "type_name": "电影"
+  },
+  {
+    "type_id": "2",
+    "type_name": "连续剧"
+  },
+  {
+    "type_id": "3",
+    "type_name": "综艺"
+  },
+  {
+    "type_id": "4",
+    "type_name": "动漫"
+  },
+  {
+    "type_id": "76",
+    "type_name": "记录"
+  },
+  {
+    "type_id": "73",
+    "type_name": "4K电影"
+  },
+  {
+    "type_id": "75",
+    "type_name": "4K剧集"
+  }
+]

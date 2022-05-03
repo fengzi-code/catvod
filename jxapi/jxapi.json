@@ -51,7 +51,7 @@
   },
     {
       "name": "追剧喵",
-      "scope": "qq,iqiyi",
+      "scope": "all",
       "url": "https://jx.zjmiao.com/?url=",
       "weight": 100,
       "parse": 0

@@ -11,6 +11,7 @@ const (
 	MgStaticDir           = "static/mgtv"
 	QQStaticDir           = "static/qqtv"
 	IQYStaticDir          = "static/iqy"
+	ZJStaticDir           = "static/zjmiao"
 	MgBaseUrl             = "https://www.mgtv.com"
 	IqiyiFilterBaseurl    = "https://list.iqiyi.com/www/"
 	IqiyiFilterbaseEndUrl = "/19-----------1964_1979--24-1-1-iqiyi--.html?s_source=PCW_SC"

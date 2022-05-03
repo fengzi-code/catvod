@@ -77,8 +77,12 @@ func GetPlayUrl(url string) (res model.PlayResponse) {
 		reqUrl := fmt.Sprintf("%s%s", v.Url, url)
 		switch reqUrl {
 		case "https://jx.zjmiao.com/?url=" + url:
-			res.Url = GetZJMiaoUrl(reqUrl)
-			res.Header = global.Headers
+			r := GetZJMiaoUrl(reqUrl)
+			if r != "" {
+				res.Url = r
+				res.Header = global.Headers
+				return
+			}
 		default:
 			client := resty.New()
 			get, _ := client.R().
@@ -91,10 +95,11 @@ func GetPlayUrl(url string) (res model.PlayResponse) {
 				if r.Url != "" {
 					res.Url = r.Url
 					res.Header = global.Headers
+					return
 				}
 			}
 		}
-		return
+
 	}
 	return
 }

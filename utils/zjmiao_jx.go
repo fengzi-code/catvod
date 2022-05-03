@@ -7,10 +7,12 @@ import (
 	"encoding/base64"
 	"fmt"
 	"github.com/go-resty/resty/v2"
+	"time"
 )
 
 func GetZJMiaoUrl(reqUrl string) (playUrl string) {
 	client := resty.New()
+	client.SetRetryWaitTime(time.Second * 5) //设置超时时间
 	get, _ := client.R().
 		SetHeaders(global.Headers).
 		Get(reqUrl)
