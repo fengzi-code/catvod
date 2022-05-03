@@ -48,8 +48,6 @@ func (this *ZJMIAO) GetDetails(ids []string) (res []model.VodDetail) {
 		detail.VodArea = ""
 		detail.VodContent = htmlquery.InnerText(htmlquery.FindOne(doc, "//div[@class='desc_txt cf ec-palytcji cor3']/span"))
 		detail.VodYear = ""
-		detail.VodPlayFrom = ""
-		detail.VodPlayUrl = ""
 		srcNodes := htmlquery.Find(doc, "//a[contains(@class, 'channelname')]")
 		var srcs []string
 		for _, srcNode := range srcNodes {
