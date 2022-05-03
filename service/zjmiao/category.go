@@ -20,7 +20,6 @@ func (this *ZJMIAO) GetCategory(typeId string, page int) (res model.Category) {
 	}
 	res.Page = page
 	res.Limit = 48
-	// <div class="page_tip cor3">共15052条数据,当前1/314页</div>
 	var totalstr, pageCount string
 	totalstr = htmlquery.InnerText(htmlquery.FindOne(doc, "//div[@class='page_tip cor3']"))
 	total, _ := strconv.Atoi(utils.GetBetweenStr(totalstr, "共", "条"))
@@ -35,7 +34,8 @@ func (this *ZJMIAO) GetCategory(typeId string, page int) (res model.Category) {
 	res.Total = total
 	res.PageCount = pageMax
 	res.VodList = make([]model.VodInfo, 0)
-	vodNodes := htmlquery.Find(doc, "//div[@class='pack-ykpack']/div[contains(@class,'pack-packcover')]/a")
+	vodNodes := htmlquery.Find(doc, "//div[@class='pack-packcover returl list-top-b']/a")
+	fmt.Printf("节点数量：%d\n", len(vodNodes))
 	for _, vodNode := range vodNodes {
 		vodName := htmlquery.SelectAttr(vodNode, "title")
 		vodUrl := htmlquery.SelectAttr(vodNode, "href")
