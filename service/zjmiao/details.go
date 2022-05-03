@@ -33,21 +33,28 @@ func (this *ZJMIAO) GetDetails(ids []string) (res []model.VodDetail) {
 		}
 		detail.VodPic = htmlquery.SelectAttr(vodPicNode, "src")
 		vodRemarksNode := htmlquery.FindOne(doc, "//div[@class='play-detail']/h1/span[@class='remarks']")
-		if vodRemarksNode == nil {
-			fmt.Println("vod remarks node is nil")
-		} else {
+		if vodRemarksNode != nil {
 			detail.VodRemarks = htmlquery.InnerText(vodRemarksNode)
 		}
+		directorNode := htmlquery.FindOne(doc, "//div[contains(@class,'cf fyy')]/p[@class='item-desc js-open-wrap hidden'][2]/a")
+		if directorNode != nil {
+			detail.VodDirector = htmlquery.InnerText(directorNode)
+		}
 
-		detail.VodDirector = ""
 		actorNodes := htmlquery.Find(doc, "//div[@class='actorlist_tit anthology-wrap']/a")
 		for _, actorNode := range actorNodes {
 			detail.VodActor += htmlquery.InnerText(actorNode) + ","
 		}
 		detail.VodActor = strings.TrimSuffix(detail.VodActor, ",")
-		detail.VodArea = ""
+		areaNode := htmlquery.FindOne(doc, "//div[contains(@class,'cf fyy')]/p[@class='item']/a")
+		if areaNode != nil {
+			detail.VodArea = htmlquery.InnerText(areaNode)
+		}
 		detail.VodContent = htmlquery.InnerText(htmlquery.FindOne(doc, "//div[@class='desc_txt cf ec-palytcji cor3']/span"))
-		detail.VodYear = ""
+		yearNode := htmlquery.FindOne(doc, "//div[contains(@class,'cf fyy')]/p[@class='item item-actor'][2]/a")
+		if yearNode != nil {
+			detail.VodYear = htmlquery.InnerText(yearNode)
+		}
 		srcNodes := htmlquery.Find(doc, "//a[contains(@class, 'channelname')]")
 		var srcs []string
 		for _, srcNode := range srcNodes {
