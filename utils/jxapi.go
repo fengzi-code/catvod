@@ -76,13 +76,15 @@ func GetPlayUrl(url string) (res model.PlayResponse) {
 
 	for _, v := range JxApiList { // 轮询法
 		reqUrl := fmt.Sprintf("%s%s", v.Url, url)
+		n := v.Name
 		if strings.Contains(url, "zjmiao") {
-			url = GetMiaoUrl(url)
-			reqUrl = fmt.Sprintf("%s%s", "https://jx.zjmiao.com/?url=", url)
+			n = "追剧喵"
+			playMaoUrl := GetMiaoUrl(url)
+			reqUrl = fmt.Sprintf("%s%s", "https://jx.zjmiao.com/?url=", playMaoUrl)
 		}
 
-		switch reqUrl {
-		case "https://jx.zjmiao.com/?url=" + url:
+		switch n {
+		case "追剧喵":
 			r := GetZJMiaoUrl(reqUrl)
 			if r != "" {
 				res.Url = r
