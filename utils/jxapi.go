@@ -3,11 +3,13 @@ package utils
 import (
 	"catvod/global"
 	"catvod/model"
+	miao "catvod/service/zjmiao"
 	"fmt"
 	"github.com/fsnotify/fsnotify"
 	"github.com/go-resty/resty/v2"
 	"github.com/spf13/viper"
 	"sort"
+	"strings"
 )
 
 type JxApi struct {
@@ -72,9 +74,16 @@ type JxApiResponse struct {
 
 // GetPlayUrl 获取播放地址
 func GetPlayUrl(url string) (res model.PlayResponse) {
+	var baseUrl string
 	for _, v := range JxApiList { // 轮询法
-
-		reqUrl := fmt.Sprintf("%s%s", v.Url, url)
+		i := strings.Index(url, "zjmiao")
+		if i != -1 {
+			playerUrl := miao.GetMiaoUrl(url)
+			baseUrl = fmt.Sprintf("%s%s", "https://jx.zjmiao.com/?url=", playerUrl)
+		} else {
+			baseUrl = fmt.Sprintf("%s%s", v.Url, url)
+		}
+		reqUrl := baseUrl
 		switch reqUrl {
 		case "https://jx.zjmiao.com/?url=" + url:
 			r := GetZJMiaoUrl(reqUrl)
