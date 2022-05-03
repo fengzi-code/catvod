@@ -2,6 +2,7 @@ package zjmiao
 
 import (
 	"catvod/model"
+	"catvod/utils"
 	"fmt"
 	"github.com/antchfx/htmlquery"
 	"strings"
@@ -25,6 +26,7 @@ func GetVodInfo(url string) (vodInfo []model.VodInfo) {
 		vodPicNode := htmlquery.FindOne(a, "div[@class='bj eclazy']")
 		vodPic := htmlquery.SelectAttr(vodPicNode, "data-original")
 		vodId := htmlquery.SelectAttr(a, "href")
+		vodId = utils.GetBetweenStr(vodId, "id/", "/")
 		vodName := htmlquery.SelectAttr(a, "title")
 		vodPic = strings.Replace(vodPic, `/img.php?url=`, "", -1)
 		fmt.Println(vodPic, vodId, vodName)
