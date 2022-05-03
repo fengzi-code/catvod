@@ -25,5 +25,7 @@ func (this *ZJMIAO) GetFilter(ext string) (filter string) {
 		filter += fmt.Sprintf("%s/%s/", k, v)
 	}
 	fmt.Println(`https://zjmiao.com/index.php/vod/show/id/1/` + filter)
+	this.Filters = filter
+
 	return
 }
