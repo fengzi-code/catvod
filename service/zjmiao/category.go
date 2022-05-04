@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/antchfx/htmlquery"
 	"strconv"
+	"strings"
 )
 
 const categoryUrl = "https://zjmiao.com/index.php/vod/show/id/"
@@ -48,6 +49,14 @@ func (this *ZJMIAO) GetCategory(typeId string, page int) (res model.Category) {
 			continue
 		}
 		vodImg := htmlquery.SelectAttr(vodImgNode, "data-original")
+		// 处理有些图片不显示问题，原因是/img.php?url=的这种
+		if strings.HasPrefix(vodImg, "/img.php?url=") {
+			vodImg = strings.TrimPrefix(vodImg, "/img.php?url=")
+		}
+		if !strings.HasPrefix(vodImg, "http") {
+			fmt.Printf("可能异常的图片链接:%s\n", vodImg)
+		}
+
 		vodRemarkNode := htmlquery.FindOne(vodNode, "//span[@class='pack-prb hidden']")
 		var vodRemark string
 		if vodRemarkNode == nil {
