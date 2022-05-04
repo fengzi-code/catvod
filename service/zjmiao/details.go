@@ -30,7 +30,10 @@ func (this *ZJMIAO) GetDetails(ids []string) (res []model.VodDetail) {
 		if vodPicNode != nil {
 			detail.VodPic = htmlquery.SelectAttr(vodPicNode, "src")
 		}
-
+		// 处理有些图片不显示问题，原因是/img.php?url=的这种
+		if strings.HasPrefix(detail.VodPic, "/img.php?url=") {
+			detail.VodPic = strings.TrimPrefix(detail.VodPic, "/img.php?url=")
+		}
 		vodRemarksNode := htmlquery.FindOne(doc, "//div[@class='play-detail']/h1/span[@class='remarks']")
 		if vodRemarksNode != nil {
 			detail.VodRemarks = htmlquery.InnerText(vodRemarksNode)
