@@ -7,6 +7,7 @@ var (
 		"Content-Type": ContentType,
 		"origin":       "",
 		"referer":      "",
+		"Host":         "",
 	}
 	BindAddr string
 )
