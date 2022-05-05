@@ -88,7 +88,7 @@ func GetPlayUrl(url string) (res model.PlayResponse) {
 			r := GetZJMiaoUrl(reqUrl)
 			if r != "" {
 				res.Url = r
-				res.Header = global.Headers
+				// res.Header = global.Headers
 				return
 			}
 		default:
