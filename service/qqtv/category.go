@@ -14,6 +14,7 @@ const cateGoryApi = "https://v.qq.com/x/bu/pagesheet/list?append=1&channel=%s&li
 
 func (this *QQTV) GetCategory(typeId string, page int) (res model.Category) {
 	fmt.Println("GetCategory", this.Filters)
+	// 下面的(page-1)*30其实是offset，即偏移量。qqtv的url就是这样的
 	url := fmt.Sprintf(cateGoryApi, typeId, (page-1)*30, this.Filters)
 	fmt.Println("分页地址：", url)
 	doc, err := htmlquery.LoadURL(url)
