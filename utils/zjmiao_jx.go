@@ -7,6 +7,7 @@ import (
 )
 
 func GetZJMiaoUrl(reqUrl string) (playUrl string) {
+	// 加了headers会出现搜索后无法播放的情况，并且导致其他从分类页点进去的也无法播放
 	// headers := global.Headers
 	// headers["Host"] = "jx.zjmiao.com"
 	// headers["origin"] = "jx.zjmiao.com"
