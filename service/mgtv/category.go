@@ -12,7 +12,7 @@ import (
 const cateGoryApi = "https://pianku.api.mgtv.com/rider/list/pcweb/v3?platform=pcweb&channelId=%s&pn=%d&%s"
 
 func (this *MGTV) GetCategory(typeId string, page int) (res model.Category) {
-	url := fmt.Sprintf(cateGoryApi, typeId, (page-1)*30, this.Filters)
+	url := fmt.Sprintf(cateGoryApi, typeId, page, this.Filters)
 	fmt.Println("分页地址：", url)
 	client := resty.New()
 	get, err := client.R().
