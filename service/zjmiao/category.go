@@ -22,18 +22,17 @@ func (this *ZJMIAO) GetCategory(typeId string, page int) (res model.Category) {
 	res.Page = page
 	res.Limit = 48
 	var totalstr, pageCount string
-	totalstr = htmlquery.InnerText(htmlquery.FindOne(doc, "//div[@class='page_tip cor3']"))
+	totalNode := htmlquery.FindOne(doc, "//div[@class='page_tip cor3']")
+	if totalNode == nil {
+		fmt.Printf("追剧喵分类页找不到total节点，说明数据小于1页，请手动访问url确认: %s\n", url)
+	} else {
+		totalstr = htmlquery.InnerText(totalNode)
+	}
+
 	total, _ := strconv.Atoi(utils.GetBetweenStr(totalstr, "共", "条"))
 	pageCount = utils.GetBetweenStr(totalstr, "/", "页")
 	pageMax, _ := strconv.Atoi(pageCount)
-	if total <= 0 {
-		total = 5000
-	}
-	if pageMax <= 0 {
-		pageMax = 167
-	}
-	res.Total = total
-	res.PageCount = pageMax
+
 	res.VodList = make([]model.VodInfo, 0)
 	vodNodes := htmlquery.Find(doc, "//div[@class='pack-packcover returl list-top-b']/a")
 	fmt.Printf("节点数量：%d\n", len(vodNodes))
@@ -72,6 +71,13 @@ func (this *ZJMIAO) GetCategory(typeId string, page int) (res model.Category) {
 		}
 		res.VodList = append(res.VodList, vodInfo)
 	}
-
+	if total <= res.Limit {
+		total = len(res.VodList)
+	}
+	if pageMax <= 0 {
+		pageMax = 1
+	}
+	res.Total = total
+	res.PageCount = pageMax
 	return
 }
