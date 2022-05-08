@@ -5,13 +5,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net/url"
 	"strings"
 )
 
 func (this *ZJMIAO) GetFilter(ext string) (filter string) {
-	//{"area":"中国大陆","year":"2022","class":"全部"}
-	ext = strings.Replace(ext, "0%3D", "", -1)
-	decodeBytes, err := base64.StdEncoding.DecodeString(ext) //对ext解码
+	ext, _ = url.PathUnescape(ext)
+	decodeBytes, err := base64.URLEncoding.DecodeString(ext) //对ext解码,这里需要使用urlencoding
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -24,8 +24,10 @@ func (this *ZJMIAO) GetFilter(ext string) (filter string) {
 	for k, v := range filterMap {
 		filter += fmt.Sprintf("%s/%s/", k, v)
 	}
+	filter = strings.Replace(filter, "area/全部/", "", -1)
+	filter = strings.Replace(filter, "year/全部/", "", -1)
+	filter = strings.Replace(filter, "class/全部/", "", -1)
 	fmt.Println(`https://zjmiao.com/index.php/vod/show/id/1/` + filter)
 	this.Filters = filter
-
 	return
 }

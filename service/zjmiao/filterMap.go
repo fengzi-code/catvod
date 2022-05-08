@@ -54,6 +54,6 @@ func (this *ZJMIAO) GetFilterMap(t string) {
 			},
 		)
 	}
-
+	fmt.Println(filts)
 	this.FilterMap[t] = filts
 }
