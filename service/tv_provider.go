@@ -2,10 +2,10 @@ package service
 
 import (
 	"catvod/model"
+	"catvod/service/dy555"
 	"catvod/service/iqytv"
 	"catvod/service/mgtv"
 	"catvod/service/qqtv"
-	"catvod/service/zjmiao"
 )
 
 type TVProvider interface {
@@ -24,8 +24,8 @@ func NewTVProvider(p string) TVProvider {
 		return &mgtv.MGTV{}
 	case "iqiyi":
 		return &iqytv.IQYTV{}
-	case "zjmiao":
-		return &zjmiao.ZJMIAO{}
+	case "dy555":
+		return &dy555.DY555{}
 	default:
 		return &qqtv.QQTV{}
 	}

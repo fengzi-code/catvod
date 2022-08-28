@@ -18,7 +18,7 @@ func (this *MGTV) GetCategory(typeId string, page int) (res model.Category) {
 	get, err := client.R().
 		SetResult(response.Category{}). //model.Category结构体用来存储返回的json数据
 		ForceContentType(global.JsonType).
-		SetHeaders(global.Headers).
+		//SetHeaders(global.Headers).
 		// 从芒果api中取分类页中的数据
 		Get(url)
 	if err != nil {
@@ -38,12 +38,14 @@ func (this *MGTV) GetCategory(typeId string, page int) (res model.Category) {
 		} else {
 			vodRemarks = v.RightCorner.Text + "[" + v.UpdateInfo + "]"
 		}
-		res.VodList = append(res.VodList, model.VodInfo{
-			VodId:      v.PlayPartId,
-			VodName:    v.Title,
-			VodPic:     v.Img,
-			VodRemarks: vodRemarks,
-		})
+		res.VodList = append(
+			res.VodList, model.VodInfo{
+				VodId:      v.PlayPartId,
+				VodName:    v.Title,
+				VodPic:     v.Img,
+				VodRemarks: vodRemarks,
+			},
+		)
 	}
 	return
 }

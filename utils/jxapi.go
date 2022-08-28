@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"catvod/global"
 	"catvod/model"
 	"fmt"
 	"github.com/fsnotify/fsnotify"
@@ -49,15 +48,17 @@ func init() {
 	}
 	v.WatchConfig()
 	var apis Apis
-	v.OnConfigChange(func(e fsnotify.Event) {
-		fmt.Println("config file changed:", e.Name)
-		if err := v.Unmarshal(&apis); err != nil {
-			fmt.Println(err)
-		}
-		JxApiList = apis.Apis
-		sort.Stable(sort.Reverse(JxApiList))
-		fmt.Printf("文件改变后，解析Api列表: %+v\n", JxApiList)
-	})
+	v.OnConfigChange(
+		func(e fsnotify.Event) {
+			fmt.Println("config file changed:", e.Name)
+			if err := v.Unmarshal(&apis); err != nil {
+				fmt.Println(err)
+			}
+			JxApiList = apis.Apis
+			sort.Stable(sort.Reverse(JxApiList))
+			fmt.Printf("文件改变后，解析Api列表: %+v\n", JxApiList)
+		},
+	)
 	if err := v.Unmarshal(&apis); err != nil {
 		fmt.Println(err)
 	}
@@ -77,32 +78,31 @@ func GetPlayUrl(url string) (res model.PlayResponse) {
 	for _, v := range JxApiList { // 轮询法
 		reqUrl := fmt.Sprintf("%s%s", v.Url, url)
 		n := v.Name
-		if strings.Contains(url, "zjmiao") {
-			n = "追剧喵"
-			playMaoUrl := GetMiaoUrl(url)
-			reqUrl = fmt.Sprintf("%s%s", "https://jx.zjmiao.com/?url=", playMaoUrl)
+		if strings.Contains(url, "5dy6") {
+			n = "555dy"
+			//playMaoUrl := GetMiaoUrl(url)
+			//reqUrl = fmt.Sprintf("%s%s", "https://jx.zjmiao.com/?url=", playMaoUrl)
 		}
 
 		switch n {
-		case "追剧喵":
-			r := GetZJMiaoUrl(reqUrl)
-			if r != "" {
-				res.Url = r
-				// res.Header = global.Headers
-				return
-			}
+		case "555dy":
+			fmt.Printf("555dy请求地址: %s", url)
+			res.Url = url
+			res.Parse = 1
+			return
+
 		default:
 			client := resty.New()
 			get, _ := client.R().
 				SetResult(&JxApiResponse{}).
-				SetHeaders(global.Headers).
+				//SetHeaders(global.Headers).
 				Get(reqUrl)
 			fmt.Printf("请求地址: %s, 请求状态码: %d, 请求结果: %+v\n", reqUrl, get.StatusCode(), get.Result())
 			if get.IsSuccess() {
 				r := get.Result().(*JxApiResponse)
 				if r.Url != "" {
 					res.Url = r.Url
-					res.Header = global.Headers
+					//res.Header = global.Headers
 					return
 				}
 			}

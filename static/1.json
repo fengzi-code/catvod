@@ -1,10 +1,10 @@
 {
   "sites": [
     {
-      "key": "zjmiao",
-      "name": "zjmiao",
+      "key": "555dy",
+      "name": "555dy",
       "type": 4,
-      "api": "http://192.168.10.105:8080/api/v1/zjmiao",
+      "api": "http://192.168.10.105:8080/api/v1/dy555",
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 1
