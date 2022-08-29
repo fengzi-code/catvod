@@ -4,8 +4,10 @@ import (
 	"catvod/global"
 	"catvod/model"
 	"catvod/utils"
+	"encoding/json"
 	"fmt"
 	"github.com/antchfx/htmlquery"
+	"io/ioutil"
 )
 
 const dyHomeApi = "https://www.5dy6.cc/label/new.html"
@@ -33,10 +35,22 @@ func (this *DY555) GetHome() (res model.HomeContent) {
 	this.FilterMap = make(model.FilterMap)
 	filterJsonFile := global.DY555StaticDir + "/filters.json"
 	exist, err = utils.PathExists(filterJsonFile)
+	FilterMap := make(model.FilterMap)
 	if !exist {
 		// TODO: 补充不存在时从网络上获取并写到本地的逻辑
 		fmt.Println("补充")
-		//return
+		for _, t := range res.VodClass {
+			filters := get555DyFilter(t.TypeId)
+			FilterMap[t.TypeId] = filters
+		}
+		marshal, err := json.Marshal(FilterMap)
+		if err != nil {
+			panic(err)
+		}
+		err = ioutil.WriteFile(filterJsonFile, marshal, 0644)
+		if err != nil {
+			panic(err)
+		}
 	}
 	this.FilterMap = utils.LoadFilterJson(filterJsonFile)
 	res.Filters = this.FilterMap
@@ -50,7 +64,6 @@ func (this *DY555) GetHome() (res model.HomeContent) {
 	list := htmlquery.Find(
 		doc, "//div[@class='module-main tab-list active']/div[@class='module-items module-poster-items']/a",
 	)
-	fmt.Println("dy555 list: ", htmlquery.OutputHTML(list[0], true))
 	vodInfo := make([]model.VodInfo, 0)
 	for _, item := range list {
 		//a := htmlquery.FindOne(item, "//a[@class='figure']")

@@ -29,7 +29,7 @@ func (this *DY555) GetCategory(typeId string, page int) (res model.Category) {
 	list := htmlquery.Find(
 		doc, "//div[@class='module-items module-poster-items-base ']/a",
 	)
-	fmt.Println("dy555 list: ", htmlquery.OutputHTML(list[0], true))
+	//fmt.Println("dy555 list: ", htmlquery.OutputHTML(list[0], true))
 	vodInfo := make([]model.VodInfo, 0)
 	for _, item := range list {
 		//a := htmlquery.FindOne(item, "//a[@class='figure']")
