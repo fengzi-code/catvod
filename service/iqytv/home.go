@@ -59,7 +59,9 @@ func (this *IQYTV) GetHome() (res model.HomeContent) {
 			if t.TypeId == "4" {
 				comic = true
 			}
-			filters := getiqiyiFilter(t.TypeId, global.IqiyiFilterBaseurl+t.TypeId+global.IqiyiFilterbaseEndUrl, comic, year)
+			filters := GetFilterMap(
+				t.TypeId, global.IqiyiFilterBaseurl+t.TypeId+global.IqiyiFilterbaseEndUrl, comic, year,
+			)
 			year = false
 			comic = false
 			FilterMap[t.TypeId] = filters
@@ -82,12 +84,14 @@ func (this *IQYTV) GetHome() (res model.HomeContent) {
 		b := strconv.FormatInt(b2, 10)
 		cc := strconv.Itoa(v.ChannelId)
 		d := base64.StdEncoding.EncodeToString([]byte(b + "|" + cc + "|" + v.Name + "|" + v.ImageUrl))
-		res.VodList = append(res.VodList, model.VodInfo{
-			VodId:      d,
-			VodName:    v.Name,
-			VodPic:     v.ImageUrl,
-			VodRemarks: fmt.Sprintf("更新至%d集", v.LatestOrder),
-		})
+		res.VodList = append(
+			res.VodList, model.VodInfo{
+				VodId:      d,
+				VodName:    v.Name,
+				VodPic:     v.ImageUrl,
+				VodRemarks: fmt.Sprintf("更新至%d集", v.LatestOrder),
+			},
+		)
 	}
 	return
 }

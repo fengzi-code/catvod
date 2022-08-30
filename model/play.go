@@ -27,4 +27,5 @@ type PlayResponse struct {
 	Url     string            `json:"url"`
 	Parse   int               `json:"parse"` // 是否由前端APP解析，0: 不解析，1: 解析
 	Header  map[string]string `json:"header"`
+	From    string            `json:"from"`
 }

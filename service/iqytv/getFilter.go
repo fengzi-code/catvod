@@ -13,7 +13,7 @@ import (
 
 var Filters model.Filters
 
-func getiqiyiFilter(t, url string, comic, year bool) (res model.Filters) {
+func GetFilterMap(t, url string, comic, year bool) (res model.Filters) {
 	client := resty.New()
 	get, err := client.R().
 		SetHeaders(global.Headers).
