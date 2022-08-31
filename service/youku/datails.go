@@ -35,8 +35,9 @@ func (this *YOUKU) GetDetails(ids []string) (res []model.VodDetail) {
 				},
 			).
 			Get(h5Url)
+		fmt.Println(h5Url)
 		cookies := get.Cookies()
-		fmt.Println(cookies)
+		fmt.Println("cookies: ", cookies)
 		var m_h5_tk string
 		for _, v := range cookies {
 			if v.Name == "_m_h5_tk" {
