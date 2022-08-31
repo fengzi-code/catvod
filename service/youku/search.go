@@ -19,7 +19,7 @@ const searchUrl = "https://so.youku.com/search_video/q_%s"
 const (
 	sApi      = `mtop.youku.soku.yksearch`
 	sAppkey   = `23774304`
-	sData     = `{"searchType":1,"keyword":"女人","pg":1,"pz":5,"site":1,"appCaller":"pc","appScene":"mobile_multi","userTerminal":2,"sdkver":313,"userFrom":1,"noqc":0,"aaid":"bf533a34a7532e5d1d0893b9e2e3bdef","ftype":0,"duration":"","categories":"","ob":"","utdId":"tP/hF4OrRWkCAXL6lgpWdwlE","userType":"guest","userNumId":0,"searchFrom":"1","sourceFrom":"home"}`
+	sData     = `{"searchType":1,"keyword":"女人","pg":1,"pz":10,"site":1,"appCaller":"pc","appScene":"mobile_multi","userTerminal":2,"sdkver":313,"userFrom":1,"noqc":0,"aaid":"bf533a34a7532e5d1d0893b9e2e3bdef","ftype":0,"duration":"","categories":"","ob":"","utdId":"tP/hF4OrRWkCAXL6lgpWdwlE","userType":"guest","userNumId":0,"searchFrom":"1","sourceFrom":"home"}`
 	searcapi1 = "https://acs.youku.com/h5/mtop.youku.soku.yksearch/2.0/?jsv=2.5.1&appKey=" + sAppkey
 	sH5Url    = "https://acs.youku.com/h5/" + sApi + "/2.0/?jsv=2.5.1&appKey=" + "23774304" + "&api=" + sApi
 )
@@ -72,9 +72,42 @@ func (this *YOUKU) Search(wd string) (res []model.VodInfo) {
 			},
 		).
 		SetCookies(cookies).
-		SetResult(&youkuSearch).
+		SetResult(response.YoukuSearch{}).
 		Get(api)
-	fmt.Println(get.String())
+
+	c := get.Result().(*response.YoukuSearch)
+
+	//JSON.data.nodes[0].nodes[0].nodes[0].data.tempTitle
+	//JSON.data.nodes[1].nodes[0].nodes[0].data.tempTitle
+	//JSON.data.nodes[1].nodes[1].data.tempTitle
+	//JSON.data.nodes[4].nodes[0].nodes[0].data.tempTitle
+	//JSON.data.nodes[4].nodes[1].data.tempTitle
+	//JSON.data.nodes[1].nodes[1].nodes[0].data.videoId
+	//JSON.data.nodes[0].nodes[0].nodes[0].data.realShowId
+	//JSON.data.nodes[1].nodes[0].nodes[0].data.posterDTO.vThumbUrl
+	//https://v.youku.com/v_nextstage/id_6c0ba80675594b04a047.html
+	//JSON.data.nodes[1].nodes[0].nodes[0].data.stripeBottom
+	fmt.Println(55555555555, len(c.Data.Nodes))
+	for _, node := range c.Data.Nodes {
+		for _, s := range node.Nodes {
+
+			if s.Nodes[0].Data.TempTitle != "" && s.Nodes[0].Data.IsYouku == 1 {
+				name := s.Nodes[0].Data.TempTitle
+				showid := s.Nodes[0].Data.RealShowId
+				resp, err := http.Get("https://v.youku.com/v_nextstage/id_" + showid + ".html")
+				request := resp.Request.URL.String()
+				if err != nil {
+					fmt.Println(err)
+					request = ""
+				}
+
+				pic := s.Nodes[0].Data.PosterDTO.VThumbUrl
+				remark := s.Nodes[0].Data.StripeBottom
+				fmt.Println(name, showid, pic, remark, request)
+			}
+		}
+
+	}
 	os.Exit(0)
 
 	surl := fmt.Sprintf(searchUrl, url.QueryEscape(wd))
