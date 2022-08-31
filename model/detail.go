@@ -1,7 +1,15 @@
 package model
 
 /*
-	详情分两种情况，一种是
+	VodInfo      基本信息
+	TypeName     类型名称: 如剧情片
+	VodYear      年份	: 如2017
+	VodArea      地区	: 如大陆
+	VodActor     演员	: 如陈凯歌
+	VodDirector  导演	: 如陈凯歌
+	VodContent   影视简介
+	VodPlayFrom  播放来源
+	VodPlayUrl   播放地址
 */
 
 type VodDetail struct {

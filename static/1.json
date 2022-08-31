@@ -38,6 +38,16 @@
       "quickSearch": 1,
       "filterable": 1
     }
+  ,
+    {
+      "key": "youku",
+      "name": "youku",
+      "type": 4,
+      "api": "http://192.168.10.105:8080/api/v1/youku",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1
+    }
   ],
   "parses": [
     {

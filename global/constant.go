@@ -14,6 +14,7 @@ const (
 	ZJStaticDir           = "static/zjmiao"
 	DY555StaticDir        = "static/dy555"
 	MgBaseUrl             = "https://www.mgtv.com"
+	YOUKUStaticDir        = "static/youku"
 	IqiyiFilterBaseurl    = "https://list.iqiyi.com/www/"
 	IqiyiFilterbaseEndUrl = "/19-----------1964_1979--24-1-1-iqiyi--.html?s_source=PCW_SC"
 	IqiyiCatBaseUrl       = "https://pcw-api.iqiyi.com/search/recommend/list?data_type=1&ret_num=10&channel_id="

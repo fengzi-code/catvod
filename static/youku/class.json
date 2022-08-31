@@ -1,0 +1,22 @@
+[
+  {
+    "type_id": "97",
+    "type_name": "电视剧"
+  },
+  {
+    "type_id": "96",
+    "type_name": "电影"
+  },
+  {
+    "type_id": "85",
+    "type_name": "综艺"
+  },
+  {
+    "type_id": "100",
+    "type_name": "动漫"
+  },
+  {
+    "type_id": "177",
+    "type_name": "儿童"
+  }
+]

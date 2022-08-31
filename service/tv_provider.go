@@ -6,6 +6,7 @@ import (
 	"catvod/service/iqytv"
 	"catvod/service/mgtv"
 	"catvod/service/qqtv"
+	"catvod/service/youku"
 )
 
 type TVProvider interface {
@@ -26,7 +27,9 @@ func NewTVProvider(p string) TVProvider {
 		return &iqytv.IQYTV{}
 	case "dy555":
 		return &dy555.DY555{}
+	case "youku":
+		return &youku.YOUKU{}
 	default:
-		return &qqtv.QQTV{}
+		return &dy555.DY555{}
 	}
 }
