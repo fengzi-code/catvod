@@ -4,7 +4,6 @@ import (
 	"catvod/model"
 	"fmt"
 	"github.com/fsnotify/fsnotify"
-	"github.com/go-resty/resty/v2"
 	"github.com/spf13/viper"
 	"sort"
 	"strings"
@@ -76,7 +75,7 @@ type JxApiResponse struct {
 func GetPlayUrl(url string) (res model.PlayResponse) {
 
 	for _, v := range JxApiList { // 轮询法
-		reqUrl := fmt.Sprintf("%s%s", v.Url, url)
+		//reqUrl := fmt.Sprintf("%s%s", v.Url, url)
 		n := v.Name
 		if strings.Contains(url, "5dy6") {
 			n = "555dy"
@@ -92,20 +91,11 @@ func GetPlayUrl(url string) (res model.PlayResponse) {
 			return
 
 		default:
-			client := resty.New()
-			get, _ := client.R().
-				SetResult(&JxApiResponse{}).
-				//SetHeaders(global.Headers).
-				Get(reqUrl)
-			fmt.Printf("请求地址: %s, 请求状态码: %d, 请求结果: %+v\n", reqUrl, get.StatusCode(), get.Result())
-			if get.IsSuccess() {
-				r := get.Result().(*JxApiResponse)
-				if r.Url != "" {
-					res.Url = r.Url
-					//res.Header = global.Headers
-					return
-				}
-			}
+			fmt.Printf("请求地址: %s, 解析API: %s", url, v.Url)
+			res.Url = url
+			res.PlayUrl = v.Url
+			res.Parse = 1
+			return
 		}
 
 	}
