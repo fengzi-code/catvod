@@ -9,6 +9,7 @@ import (
 	"github.com/go-resty/resty/v2"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -35,14 +36,13 @@ func (this *YOUKU) Search(wd string) (res []model.VodInfo) {
 			},
 		).
 		Get(sH5Url)
-	cookies := get.Cookies()
-	fmt.Println("cookies: ", cookies)
+	youkuCookies := get.Cookies()
+	fmt.Println("cookies: ", youkuCookies)
 	var m_h5_tk string
-	for _, v := range cookies {
+	for _, v := range youkuCookies {
 		if v.Name == "_m_h5_tk" {
 			m_h5_tk = v.Value
 		}
-
 	}
 
 	tokens := strings.Split(m_h5_tk, "_")
@@ -64,26 +64,31 @@ func (this *YOUKU) Search(wd string) (res []model.VodInfo) {
 				"Origin":     "https://so.youku.com",
 			},
 		).
-		SetCookies(cookies).
+		SetCookies(youkuCookies).
 		SetResult(response.YoukuSearch{}).
 		Get(api)
-
 	c := get.Result().(*response.YoukuSearch)
 	for _, node := range c.Data.Nodes {
 		for _, s := range node.Nodes {
-
 			if s.Nodes[0].Data.TempTitle != "" && s.Nodes[0].Data.IsYouku == 1 {
 				name := s.Nodes[0].Data.TempTitle
 				showid := s.Nodes[0].Data.RealShowId
-				resp, err := http.Get("https://v.youku.com/v_nextstage/id_" + showid + ".html?spm=a2h0c.8166622.PhoneSokuProgram_1.dposter")
-				request := resp.Request.URL.String()
-				if err != nil {
-					fmt.Println(err)
-					request = ""
+				vid := s.Nodes[0].Data.VideoId
+				if vid == "" {
+					for i := 0; i < 10; i++ {
+						get2, _ := client.R().
+							Get("https://v.youku.com/v_nextstage/id_" + showid + ".html?spm=a2ha1.14919748_WEBMOVIE_JINGXUAN.drawer6.d_zj1_3&s=" + showid + "&scm=20140719.manual.4423.show_" + showid)
+						vid = utils.GetBetweenStr(get2.String(), `id_`, `.html`)
+						_, err := strconv.Atoi(vid) // vid不为数字则匹配成功,否则继续匹配
+						if err != nil {
+							break
+						}
+						time.Sleep(time.Second / 10)
+						fmt.Println("第", i, "次匹配")
+					}
 				}
 				pic := s.Nodes[0].Data.PosterDTO.VThumbUrl
 				remark := s.Nodes[0].Data.StripeBottom
-				vid := utils.GetBetweenStr(request, `id_`, `.html`)
 				fmt.Println(name, showid, pic, remark, vid)
 				res = append(
 					res, model.VodInfo{
@@ -95,7 +100,6 @@ func (this *YOUKU) Search(wd string) (res []model.VodInfo) {
 				)
 			}
 		}
-
 	}
 	return
 }
