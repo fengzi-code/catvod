@@ -55,7 +55,6 @@ func (this *YOUKU) Search(wd string) (res []model.VodInfo) {
 	signByte := md5.Sum([]byte(sign))
 	sign = fmt.Sprintf("%x", signByte)
 	api := searcapi1 + `&t=` + timeStamp + `&sign=` + sign + "&api=" + sApi + `&type=originaljson&v=2.0&ecode=1&dataType=json&jsonpIncPrefix=headerSearch&data=` + url.QueryEscape(data)
-	fmt.Println(api)
 	get, _ = client.R().
 		SetHeaders(
 			map[string]string{
@@ -76,15 +75,26 @@ func (this *YOUKU) Search(wd string) (res []model.VodInfo) {
 				vid := s.Nodes[0].Data.VideoId
 				if vid == "" {
 					for i := 0; i < 10; i++ {
-						get2, _ := client.R().
-							Get("https://v.youku.com/v_nextstage/id_" + showid + ".html?spm=a2ha1.14919748_WEBMOVIE_JINGXUAN.drawer6.d_zj1_3&s=" + showid + "&scm=20140719.manual.4423.show_" + showid)
-						vid = utils.GetBetweenStr(get2.String(), `id_`, `.html`)
-						_, err := strconv.Atoi(vid) // vid不为数字则匹配成功,否则继续匹配
+						if i == 9 {
+							return
+						}
+						resp, _ := http.Get("https://v.youku.com/v_nextstage/id_" + showid + ".html?spm=a2ha1.14919748_WEBMOVIE_JINGXUAN.drawer6.d_zj1_3&s=" + showid + "&scm=20140719.manual.4423.show_" + showid)
+						vid = utils.GetBetweenStr(resp.Request.URL.String(), `id_`, `.html`)
+						//get2, _ := client.R().
+						//	Get("https://v.youku.com/v_nextstage/id_" + showid + ".html?spm=a2ha1.14919748_WEBMOVIE_JINGXUAN.drawer6.d_zj1_3&s=" + showid + "&scm=20140719.manual.4423.show_" + showid)
+						//vid = utils.GetBetweenStr(get2.String(), `id_`, `.html`)
+						fmt.Println("第", i, "次匹配", vid, showid)
+						if vid == "" || vid == showid {
+							continue
+						}
+						id, err := strconv.Atoi(vid) // vid不为数字则匹配成功,否则继续匹配
 						if err != nil {
+							fmt.Println("222222222222222222222", id, vid, err)
 							break
 						}
-						time.Sleep(time.Second / 10)
-						fmt.Println("第", i, "次匹配")
+
+						time.Sleep(time.Second)
+
 					}
 				}
 				pic := s.Nodes[0].Data.PosterDTO.VThumbUrl
