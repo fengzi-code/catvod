@@ -34,7 +34,6 @@ func (this *YOUKU) GetHome() (res model.HomeContent) {
 	exist, err = utils.PathExists(filterJsonFile)
 	FilterMap := make(model.FilterMap)
 	if !exist {
-		// TODO: 补充不存在时从网络上获取并写到本地的逻辑
 		fmt.Println("补充")
 		for _, t := range res.VodClass {
 			filters := GetFilterMap(t.TypeId)

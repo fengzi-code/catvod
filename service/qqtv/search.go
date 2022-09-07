@@ -38,16 +38,18 @@ func (this *QQTV) Search(wd string) (res []model.VodInfo) {
 			if remarksNode != nil {
 				vodRemarks = htmlquery.InnerText(remarksNode)
 			}
-			res = append(res, model.VodInfo{
-				VodId:      vodId,
-				VodName:    vodName,
-				VodPic:     vodPic,
-				VodRemarks: vodRemarks,
-			})
+			res = append(
+				res, model.VodInfo{
+					VodId:      vodId,
+					VodName:    vodName,
+					VodPic:     vodPic,
+					VodRemarks: vodRemarks,
+				},
+			)
 		}
 
 	}
-	fmt.Printf("第一层结果总数: %d, 详情: %+v\n", len(res), res)
+	fmt.Printf("第一层结果总数: %d \n", len(res))
 	// 取第二层结果：相关影视作品卡片层
 	resultNodes := htmlquery.Find(doc, "//div[@class='_infos']/div/a[@class='figure result_figure']")
 	for _, resultNode := range resultNodes {
@@ -68,15 +70,17 @@ func (this *QQTV) Search(wd string) (res []model.VodInfo) {
 			vodName = strings.Replace(vodName, "\u0005", "", -1)
 			vodName = strings.Replace(vodName, "\u0006", "", -1)
 			// fmt.Printf("vodId: %s, vodName: %s, vodPic: %s\n", vodId, vodName, vodPic)
-			res = append(res, model.VodInfo{
-				VodId:      vodId,
-				VodName:    vodName,
-				VodPic:     vodPic,
-				VodRemarks: vodRemarks,
-			})
+			res = append(
+				res, model.VodInfo{
+					VodId:      vodId,
+					VodName:    vodName,
+					VodPic:     vodPic,
+					VodRemarks: vodRemarks,
+				},
+			)
 		}
 	}
-	fmt.Printf("第二层结果总数: %d, 详情: %+v\n", len(res), res)
+	fmt.Printf("第二层结果总数: %d \n", len(res))
 	// 取第三层结果，取出result_series_new节点，这个节点的r-props属性中包含了所有相关影视搜索结果
 	// 暂时取消这层结果显示，这层是相关影视搜索
 	// resultN := htmlquery.FindOne(doc, "//div[@class='result_series_new']")

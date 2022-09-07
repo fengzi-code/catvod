@@ -32,7 +32,9 @@ func (this *YOUKU) GetCategory(typeId string, page int) (res model.Category) {
 	res.Limit = 84
 	res.PageCount = 200
 	vodInfo := make([]model.VodInfo, 0)
+
 	for _, v := range c.Data.CategoryVideos {
+		fmt.Printf("视频名字: %s, 视频id: %s, 视频图片: %s, 视频评论: %s, \n", v.Title, v.VideoId, v.Img, v.SubTitle)
 		vodInfo = append(
 			vodInfo, model.VodInfo{
 				VodId:      v.VideoId,

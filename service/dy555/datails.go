@@ -14,14 +14,12 @@ const dy555Url = "https://www.5dy6.cc"
 func (this *DY555) GetDetails(ids []string) (res []model.VodDetail) {
 	for _, id := range ids {
 		url := fmt.Sprintf(dy555DetailsUrl, id)
-		fmt.Println("url: ", url, "444")
 		doc, err := htmlquery.LoadURL(url)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 		node := htmlquery.FindOne(doc, "//div[@class='module-info-main']")
-		//fmt.Println(htmlquery.OutputHTML(node, true))
 		var detail model.VodDetail
 		detail.TypeName = htmlquery.InnerText(
 			htmlquery.FindOne(
@@ -66,9 +64,7 @@ func (this *DY555) GetDetails(ids []string) (res []model.VodDetail) {
 			doc,
 			"//div[@class='module-info-poster']//div[@class='module-item-pic']//img[@class='ls-is-cached lazy lazyload']",
 		)
-		fmt.Println(htmlquery.OutputHTML(vodPic, true))
 		detail.VodPic = htmlquery.SelectAttr(vodPic, "data-original")
-		fmt.Println(detail)
 		playNodes := htmlquery.Find(
 			doc,
 			"//div[@class='module']//div[@class='module-tab-items-box hisSwiper']//div[@class='module-tab-item tab-item']",
@@ -77,7 +73,6 @@ func (this *DY555) GetDetails(ids []string) (res []model.VodDetail) {
 		for _, item := range playNodes {
 			playName := htmlquery.SelectAttr(item, "data-dropdown-value")
 			playNames = append(playNames, playName)
-			fmt.Println(playNames)
 		}
 		playUrlNodes := htmlquery.Find(
 			doc,
@@ -93,7 +88,6 @@ func (this *DY555) GetDetails(ids []string) (res []model.VodDetail) {
 
 			reg = regexp.MustCompile(`/vodplay/(.*)html`)
 			hrefs := reg.FindAllString(html, -1)
-			fmt.Println(urls, hrefs)
 			var playurl string
 			for i, u := range urls {
 				u = strings.Replace(u, "<span>", "", -1)
@@ -105,7 +99,6 @@ func (this *DY555) GetDetails(ids []string) (res []model.VodDetail) {
 			}
 			playurls = append(playurls, playurl[:len(playurl)-1])
 		}
-		fmt.Println(len(playUrlNodes), playurls)
 		for i, name := range playNames {
 			detail.VodPlayFrom += name + "$$$"
 			detail.VodPlayUrl += playurls[i] + "$$$"

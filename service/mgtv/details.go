@@ -127,7 +127,6 @@ func (this *MGTV) GetDetails(ids []string) (res []model.VodDetail) {
 				}
 				test = append(test, tmp) //将切片添加到二维数组
 			}
-			fmt.Println(test, "_____________________________")
 			sort.Slice(
 				test, func(i, j int) bool {
 					return test[i][0] < test[j][0] // 二维数据按第一列进行排序
@@ -135,10 +134,8 @@ func (this *MGTV) GetDetails(ids []string) (res []model.VodDetail) {
 			)
 
 			for _, x := range test {
-				fmt.Println("playurlList[x[1]]: ", playurlList[x[1]])
 				detail.VodPlayUrl += playurlList[x[1]] // 装所有数据组合成playurl需要的文本
 			}
-			fmt.Println("playurl: ", detail.VodPlayUrl)
 			detail.VodPlayUrl = detail.VodPlayUrl[:len(detail.VodPlayUrl)-1]
 		}
 		res = append(res, detail)

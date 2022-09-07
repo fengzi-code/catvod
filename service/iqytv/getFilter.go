@@ -19,7 +19,7 @@ func GetFilterMap(t, url string, comic, year bool) (res model.Filters) {
 		SetHeaders(global.Headers).
 		Get(url)
 	if err != nil {
-		fmt.Println("ddddddd")
+		fmt.Println(err)
 	}
 	c := get.Body()
 	b := string(c)
@@ -48,7 +48,6 @@ func GetFilterMap(t, url string, comic, year bool) (res model.Filters) {
 }
 
 func appenData(data []byte, filterName, filterKey string, v interface{}) {
-	fmt.Println(filterKey, filterName)
 	var filter model.Filter
 	var filterTmp model.Filter
 	var filterValueItems model.FilterValueItems
@@ -81,9 +80,7 @@ func appenData(data []byte, filterName, filterKey string, v interface{}) {
 	case []response.IqiyiFirstCategoryList:
 		tmp, _ := v.([]response.IqiyiFirstCategoryList)
 		json.Unmarshal(data, &tmp)
-		fmt.Println(tmp)
 		for _, xxxx := range tmp {
-			fmt.Println(xxxx.Name, len(xxxx.Child))
 			filter = filterTmp
 			filterValueItems = filterValueItemsTmp
 			ddd := xxxx.Name

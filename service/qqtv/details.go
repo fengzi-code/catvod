@@ -70,7 +70,6 @@ func (this *QQTV) GetDetails(ids []string) (res []model.VodDetail) {
 				fmt.Println(err)
 				return
 			}
-			fmt.Printf("开始打印结构体:  %+v\n", piNia.Global.CoverInfo)
 			coverInfo := piNia.Global.CoverInfo
 			detail.VodName = coverInfo.Title
 			detail.VodPic = coverInfo.NewPicHz

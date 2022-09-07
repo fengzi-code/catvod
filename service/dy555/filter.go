@@ -23,13 +23,12 @@ func (this *DY555) GetFilter(ext string) (filter string) {
 		}
 		// 将json字符串转换为map类型，并将key和value进行拼接成字符串
 		var filterMap map[string]string
-		fmt.Printf("decodeBytes: %s\n", decodeBytes)
+
 		err = json.Unmarshal(decodeBytes, &filterMap)
 		if err != nil {
 			log.Println("json unmarshal error:", err)
 			return filtersPrefix + filtersDefault
 		}
-		fmt.Printf("%#v\n", filterMap)
 		for k, v := range filterMap {
 			filter += fmt.Sprintf("%s=%s&", k, v)
 		}

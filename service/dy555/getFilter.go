@@ -20,7 +20,7 @@ func GetFilterMap(t string) (res model.Filters) {
 		Get(url)
 
 	if err != nil {
-		fmt.Println("ddddddd")
+		fmt.Println(err)
 	}
 
 	str := utils.GetBetweenStr(get.String(), "module-class-item scroll-content", `<!--电脑广告-->`)

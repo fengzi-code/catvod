@@ -7,7 +7,6 @@ import (
 	"crypto/md5"
 	"fmt"
 	"github.com/go-resty/resty/v2"
-	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
@@ -22,21 +21,20 @@ const (
 	sH5Url    = "https://acs.youku.com/h5/" + sApi + "/2.0/?jsv=2.5.1&appKey=" + "23774304" + "&api=" + sApi
 )
 
-var cookies []*http.Cookie
-
 func (this *YOUKU) Search(wd string) (res []model.VodInfo) {
 	client := resty.New()
+	//client.SetProxy("http://
 	client.SetRetryWaitTime(time.Second * 15) //设置超时时间
 	data := strings.Replace(sData, `SoKeyword`, wd, 1)
-	fmt.Println(sH5Url)
-	get, _ := client.R().
+	ySoget, _ := client.R().
 		SetHeaders(
 			map[string]string{
 				"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.63 Safari/537.36 Edg/102.0.1245.33",
 			},
 		).
 		Get(sH5Url)
-	youkuCookies := get.Cookies()
+
+	youkuCookies := ySoget.Cookies()
 	fmt.Println("cookies: ", youkuCookies)
 	var m_h5_tk string
 	for _, v := range youkuCookies {
@@ -49,13 +47,12 @@ func (this *YOUKU) Search(wd string) (res []model.VodInfo) {
 	//取时间戳
 	timeStamp := tokens[1]
 	token := tokens[0]
-	fmt.Println(token, timeStamp, sAppkey)
 	sign := token + "&" + timeStamp + "&" + sAppkey + "&" + data
 	//md5加密
 	signByte := md5.Sum([]byte(sign))
 	sign = fmt.Sprintf("%x", signByte)
 	api := searcapi1 + `&t=` + timeStamp + `&sign=` + sign + "&api=" + sApi + `&type=originaljson&v=2.0&ecode=1&dataType=json&jsonpIncPrefix=headerSearch&data=` + url.QueryEscape(data)
-	get, _ = client.R().
+	ySoget, err := client.R().
 		SetHeaders(
 			map[string]string{
 				"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36",
@@ -66,7 +63,11 @@ func (this *YOUKU) Search(wd string) (res []model.VodInfo) {
 		SetCookies(youkuCookies).
 		SetResult(response.YoukuSearch{}).
 		Get(api)
-	c := get.Result().(*response.YoukuSearch)
+	if err != nil {
+		print(err)
+	}
+	c := ySoget.Result().(*response.YoukuSearch)
+	//fmt.Println(ySoget.String())
 	for _, node := range c.Data.Nodes {
 		for _, s := range node.Nodes {
 			if s.Nodes[0].Data.TempTitle != "" && s.Nodes[0].Data.IsYouku == 1 {
@@ -75,31 +76,37 @@ func (this *YOUKU) Search(wd string) (res []model.VodInfo) {
 				vid := s.Nodes[0].Data.VideoId
 				if vid == "" {
 					for i := 0; i < 10; i++ {
+						fmt.Println("第", i, "次匹配")
 						if i == 9 {
 							return
 						}
-						resp, _ := http.Get("https://v.youku.com/v_nextstage/id_" + showid + ".html?spm=a2ha1.14919748_WEBMOVIE_JINGXUAN.drawer6.d_zj1_3&s=" + showid + "&scm=20140719.manual.4423.show_" + showid)
-						vid = utils.GetBetweenStr(resp.Request.URL.String(), `id_`, `.html`)
-						//get2, _ := client.R().
-						//	Get("https://v.youku.com/v_nextstage/id_" + showid + ".html?spm=a2ha1.14919748_WEBMOVIE_JINGXUAN.drawer6.d_zj1_3&s=" + showid + "&scm=20140719.manual.4423.show_" + showid)
-						//vid = utils.GetBetweenStr(get2.String(), `id_`, `.html`)
-						fmt.Println("第", i, "次匹配", vid, showid)
+						ySoget2, _ := client.R().
+							SetHeaders(
+								map[string]string{
+									"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36",
+									"Referer":    "https://v.youku.com",
+									"Origin":     "https://v.youku.com",
+								},
+							).
+							Get("https://v.youku.com/v_nextstage/id_" + showid + ".html?spm=a2ha1.14919748_WEBMOVIE_JINGXUAN.drawer6.d_zj1_3&s=" + showid + "&scm=20140719.manual.4423.show_" + showid)
+						vid = utils.GetBetweenStr(ySoget2.RawResponse.Request.URL.String(), `id_`, `.html`)
+						fmt.Println("第", i, "次匹配", vid)
 						if vid == "" || vid == showid {
 							continue
 						}
 						id, err := strconv.Atoi(vid) // vid不为数字则匹配成功,否则继续匹配
 						if err != nil {
-							fmt.Println("222222222222222222222", id, vid, err)
+							fmt.Println("匹配成功: ", id, vid)
 							break
 						}
 
-						time.Sleep(time.Second)
+						time.Sleep(time.Second / 5)
 
 					}
 				}
 				pic := s.Nodes[0].Data.PosterDTO.VThumbUrl
 				remark := s.Nodes[0].Data.StripeBottom
-				fmt.Println(name, showid, pic, remark, vid)
+				fmt.Printf("视频名字: %s, 视频id: %s, 视频图片: %s, 视频评论: %s, \n", name, vid, pic, remark)
 				res = append(
 					res, model.VodInfo{
 						VodId:      vid,

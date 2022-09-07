@@ -12,14 +12,12 @@ import (
 )
 
 var categoryList model.VodDetail
-var categoryTemp model.VodDetail
 
 func (this *IQYTV) GetDetails(ids []string) (res []model.VodDetail) {
 	//categoryList = categoryTemp // 每次查询详情时先清空旧数据
 	for _, x := range ids {
 		xx, _ := base64.StdEncoding.DecodeString(x)
 		xxx := string(xx[:])
-		fmt.Println("xxx================", xxx)
 		xs := strings.Split(xxx, "|")
 		id := xs[0]
 		t := xs[1]
@@ -27,7 +25,6 @@ func (this *IQYTV) GetDetails(ids []string) (res []model.VodDetail) {
 		pic := xs[3]
 		switch t {
 		case "15", "4", "2": //电视剧,动漫,儿童
-			fmt.Println("aid =============", id, t, vodName, pic)
 			res = getId2(t, id, vodName, pic, x)
 		case "1": //电影
 			res = getId1(t, id, vodName, pic, x)
@@ -41,7 +38,7 @@ func (this *IQYTV) GetDetails(ids []string) (res []model.VodDetail) {
 }
 func getId2(t, aid, vodName, pic, id string) (res []model.VodDetail) {
 	//https://pcw-api.iqiyi.com/albums/album/avlistinfo?aid=4378722550512701&page=1&size=30 电视剧/动漫/儿童/详情页
-	fmt.Println(t)
+	fmt.Println(t, aid, vodName, pic, id)
 	client := resty.New()
 	get, err := client.R().
 		SetResult(response.Avlistinfo{}).
@@ -50,7 +47,7 @@ func getId2(t, aid, vodName, pic, id string) (res []model.VodDetail) {
 		Get("https://pcw-api.iqiyi.com/albums/album/avlistinfo?aid=" + aid + "&page=1&size=100")
 
 	if err != nil {
-		fmt.Println("ddddddd")
+		fmt.Println(err)
 	}
 	c := get.Result().(*response.Avlistinfo)
 
@@ -92,7 +89,7 @@ func getId2(t, aid, vodName, pic, id string) (res []model.VodDetail) {
 				Get("https://pcw-api.iqiyi.com/albums/album/avlistinfo?aid=" + aid + "&page=" + strconv.Itoa(i) + "&size=100")
 
 			if err != nil {
-				fmt.Println("ddddddd")
+				fmt.Println(err)
 			}
 			c := get.Result().(*response.Avlistinfo)
 			for _, m := range c.Data.Epsodelist {
@@ -110,6 +107,7 @@ func getId2(t, aid, vodName, pic, id string) (res []model.VodDetail) {
 
 func getId1(t, aid, vodName, pic, id string) (res []model.VodDetail) {
 	//https://pcw-api.iqiyi.com/video/video/baseinfo/94453400  电影详情
+	fmt.Println(t, aid, vodName, pic, id)
 	client := resty.New()
 	get, err := client.R().
 		SetResult(response.Videoinfo{}).
@@ -118,7 +116,7 @@ func getId1(t, aid, vodName, pic, id string) (res []model.VodDetail) {
 		Get("https://pcw-api.iqiyi.com/video/video/baseinfo/" + aid)
 
 	if err != nil {
-		fmt.Println("ddddddd")
+		fmt.Println(err)
 	}
 	c := get.Result().(*response.Videoinfo)
 
@@ -161,7 +159,7 @@ func getId1(t, aid, vodName, pic, id string) (res []model.VodDetail) {
 func getId6(t, aid, vodName, pic, id string) (res []model.VodDetail) {
 	//https://pcw-api.iqiyi.com/album/album/baseinfo/238934101 综艺详情 先取tvid
 	//https://pcw-api.iqiyi.com/album/source/listByNumber/238934101?include=true&number=100&seq=true&tvId=3922660400
-
+	fmt.Println(t, aid, vodName, pic, id)
 	client := resty.New()
 	get, err := client.R().
 		SetResult(response.Tvidinfo{}).
@@ -170,7 +168,7 @@ func getId6(t, aid, vodName, pic, id string) (res []model.VodDetail) {
 		Get("https://pcw-api.iqiyi.com/album/album/baseinfo/" + aid)
 
 	if err != nil {
-		fmt.Println("ddddddd")
+		fmt.Println(err)
 	}
 	c := get.Result().(*response.Tvidinfo)
 
@@ -209,7 +207,7 @@ func getId6(t, aid, vodName, pic, id string) (res []model.VodDetail) {
 		Get("https://pcw-api.iqiyi.com/album/source/listByNumber/" + aid + "?include=true&number=100&seq=true&tvId=" + tvid)
 
 	if err != nil {
-		fmt.Println("ListByNumber")
+		fmt.Println(err)
 	}
 	cc := get.Result().(*response.ListByNumber)
 	vodurl := ""

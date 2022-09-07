@@ -84,6 +84,7 @@ func (this *IQYTV) GetHome() (res model.HomeContent) {
 		b := strconv.FormatInt(b2, 10)
 		cc := strconv.Itoa(v.ChannelId)
 		d := base64.StdEncoding.EncodeToString([]byte(b + "|" + cc + "|" + v.Name + "|" + v.ImageUrl))
+		fmt.Printf("视频名字: %s, 视频id: %s, 视频图片: %s, 视频评论: %s, \n", v.Name, d, v.ImageUrl, v.LatestOrder)
 		res.VodList = append(
 			res.VodList, model.VodInfo{
 				VodId:      d,

@@ -6,6 +6,13 @@ import (
 	"os"
 )
 
+//
+// PathExists
+//  @Description: 查询文件是否存在
+//  @param path 路径
+//  @return bool 存在返回true
+//  @return error	不存在返回error
+//
 func PathExists(path string) (bool, error) {
 	_, err := os.Stat(path)
 	if err == nil {

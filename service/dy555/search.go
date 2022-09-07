@@ -40,7 +40,7 @@ func (this *DY555) Search(wd string) (res []model.VodInfo) {
 		id := utils.GetBetweenStr(ids[i], `<a href="/vodplay/`, `-`)
 		remark := utils.GetBetweenStr(remarks[i], `module-item-note">`, `</div>`)
 		pic := utils.GetBetweenStr(pics[i], `data-original="`, `"`)
-		fmt.Println(name, i, id, pic, remark)
+		fmt.Printf("视频名字: %s, 视频id: %s, 视频图片: %s, 视频评论: %s, \n", name, id, pic, remark)
 		res = append(
 			res, model.VodInfo{
 				VodId:      id,

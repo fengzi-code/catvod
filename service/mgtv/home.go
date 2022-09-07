@@ -5,6 +5,7 @@ import (
 	"catvod/model"
 	"catvod/model/mgtv/response"
 	"catvod/utils"
+	"fmt"
 	"github.com/go-resty/resty/v2"
 	"strconv"
 )
@@ -47,13 +48,17 @@ func (this *MGTV) GetHome() (res model.HomeContent) {
 	this.FilterMap = utils.LoadFilterJson(filterJsonFile)
 	res.Filters = this.FilterMap
 	res.VodList = make([]model.VodInfo, 0)
+
 	for _, v := range c.Data {
-		res.VodList = append(res.VodList, model.VodInfo{
-			VodId:      strconv.Itoa(v.VideoId),
-			VodName:    v.Name,
-			VodPic:     v.Image,
-			VodRemarks: v.Desc,
-		})
+		fmt.Printf("视频名字: %s, 视频id: %d, 视频图片: %s, 视频评论: %s, \n", v.Name, v.VideoId, v.Image, v.Desc)
+		res.VodList = append(
+			res.VodList, model.VodInfo{
+				VodId:      strconv.Itoa(v.VideoId),
+				VodName:    v.Name,
+				VodPic:     v.Image,
+				VodRemarks: v.Desc,
+			},
+		)
 	}
 	return
 }

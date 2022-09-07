@@ -37,8 +37,6 @@ func (this *DY555) GetHome() (res model.HomeContent) {
 	exist, err = utils.PathExists(filterJsonFile)
 	FilterMap := make(model.FilterMap)
 	if !exist {
-		// TODO: 补充不存在时从网络上获取并写到本地的逻辑
-		fmt.Println("补充")
 		for _, t := range res.VodClass {
 			filters := GetFilterMap(t.TypeId)
 			FilterMap[t.TypeId] = filters
@@ -74,8 +72,7 @@ func (this *DY555) GetHome() (res model.HomeContent) {
 		vodPic := htmlquery.SelectAttr(img, "data-original")
 		remarks := htmlquery.FindOne(item, "//div [@class='module-item-note']")
 		vodRemarks := htmlquery.InnerText(remarks)
-		fmt.Println(vodName, vodId, vodPic, vodRemarks)
-
+		fmt.Printf("视频名字: %s, 视频id: %s, 视频图片: %s, 视频评论: %s, \n", vodName, vodId, vodPic, vodRemarks)
 		vodInfo = append(
 			vodInfo, model.VodInfo{
 				VodId:      vodId,

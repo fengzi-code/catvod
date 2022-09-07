@@ -35,7 +35,7 @@ func (this *YOUKU) GetDetails(ids []string) (res []model.VodDetail) {
 				},
 			).
 			Get(h5Url)
-		fmt.Println(h5Url)
+
 		cookies := get.Cookies()
 		fmt.Println("cookies: ", cookies)
 		var m_h5_tk string
@@ -50,14 +50,11 @@ func (this *YOUKU) GetDetails(ids []string) (res []model.VodDetail) {
 		//取时间戳
 		timeStamp := tokens[1]
 		token := tokens[0]
-		fmt.Println(token, timeStamp, appkey)
-
 		sign := token + "&" + timeStamp + "&" + appkey + "&" + desDataR
 		//md5加密
 		signByte := md5.Sum([]byte(sign))
 		sign = fmt.Sprintf("%x", signByte)
 		api := h5Url + `&t=` + timeStamp + `&sign=` + sign + `&type=originaljson&v=1.0&ecode=1&dataType=json&data=` + url3.QueryEscape(desDataR)
-		fmt.Println(api)
 		var describe response.YoukuDescribe
 		get, _ = client.R().
 			SetHeaders(
@@ -76,7 +73,6 @@ func (this *YOUKU) GetDetails(ids []string) (res []model.VodDetail) {
 		var vodYear string
 		//var detail response.DetailResponse
 		var detail model.VodDetail
-		fmt.Println(get.String())
 		//JSON.data[2019030100].data.nodes[0].nodes[0].nodes[0].data.desc
 		for _, node := range describe.Data.Field1.Data.Nodes {
 			for _, nod := range node.Nodes {
@@ -97,8 +93,6 @@ func (this *YOUKU) GetDetails(ids []string) (res []model.VodDetail) {
 				}
 			}
 		}
-		fmt.Println(director, actors, vodContent)
-
 		detail.VodId = id
 		detail.VodName = describe.Data.Field1.Data.Data.Extra.ShowName
 		detail.VodRemarks = describe.Data.Field1.Data.Data.Extra.ShowSubtitle

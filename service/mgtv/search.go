@@ -34,6 +34,7 @@ func (this *MGTV) Search(wd string) (res []model.VodInfo) {
 		vodId, _ := strconv.Atoi(v.Data.Vid)
 		if vodId != 0 {
 			if v.Type == "movie" || v.Type == "preview" || v.Type == "serial" || v.Type == "star" || v.Type == "program" {
+				fmt.Printf("视频名字: %s, 视频id: %d, 视频图片: %s \n", v.Data.Title, vodId, v.Data.Pic)
 				res = append(res, model.VodInfo{
 					VodId:      strconv.Itoa(vodId),
 					VodName:    v.Data.Title,
@@ -46,6 +47,7 @@ func (this *MGTV) Search(wd string) (res []model.VodInfo) {
 			i, _ := strconv.Atoi(z.SourceList[0].Vid)
 			if i != 0 {
 				if v.Type == "movie" || v.Type == "preview" || v.Type == "serial" || v.Type == "star" || v.Type == "program" {
+					fmt.Printf("视频名字: %s, 视频id: %d, 视频图片: %s \n", z.Title, i, z.Pic)
 					res = append(res, model.VodInfo{
 						VodId:      strconv.Itoa(i),
 						VodName:    z.Title,
@@ -60,6 +62,7 @@ func (this *MGTV) Search(wd string) (res []model.VodInfo) {
 			if v.Type == "movie" || v.Type == "preview" || v.Type == "serial" || v.Type == "star" || v.Type == "program" {
 				i, _ := strconv.Atoi(x.Vid)
 				if i != 0 {
+					fmt.Printf("视频名字: %s, 视频id: %d, 视频图片: %s \n", v.Data.Title, i, v.Data.Pic)
 					res = append(res, model.VodInfo{
 						VodId:      strconv.Itoa(i),
 						VodName:    v.Data.Title,

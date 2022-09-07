@@ -2,6 +2,7 @@ package utils
 
 import "strings"
 
+//取文本中间,str原始文本,start文本前面的字符,end文本后面的字符
 func GetBetweenStr(str, start, end string) string {
 	n := strings.Index(str, start)
 	if n == -1 {

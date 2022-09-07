@@ -11,9 +11,8 @@ import (
 )
 
 func (this *IQYTV) GetCategory(typeId string, page int) (res model.Category) {
-	//url := fmt.Sprintf(global.IqiyiCatBaseUrl, typeId, page, this.Filters)
 	url := global.IqiyiCatBaseUrl + typeId + "&page_id=" + strconv.Itoa(page) + this.Filters
-	fmt.Println(url)
+	fmt.Println("分类请求url: ", url)
 	client := resty.New()
 	get, err := client.R().
 		SetResult(response.IqiyiCategory{}). //model.Category结构体用来存储返回的json数据
@@ -23,7 +22,7 @@ func (this *IQYTV) GetCategory(typeId string, page int) (res model.Category) {
 		Get(url)
 
 	if err != nil {
-		fmt.Println("ddddddd")
+		fmt.Println(err)
 	}
 
 	c := get.Result().(*response.IqiyiCategory)
@@ -49,6 +48,7 @@ func (this *IQYTV) GetCategory(typeId string, page int) (res model.Category) {
 		} else {
 			vodList.VodRemarks = "更新至 " + strconv.Itoa(x.LatestOrder) + "集"
 		}
+		fmt.Printf("视频名字: %s, 视频id: %s, 视频图片: %s, 视频评论: %s, \n", x.Title, d, x.ImageUrl, vodList.VodRemarks)
 		res.VodList = append(res.VodList, vodList)
 	}
 	return

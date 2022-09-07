@@ -2,13 +2,40 @@ package utils
 
 import (
 	"catvod/model"
+	"encoding/json"
 	"fmt"
 	"github.com/fsnotify/fsnotify"
+	"github.com/go-resty/resty/v2"
 	"github.com/spf13/viper"
+	"log"
 	"sort"
 	"strings"
+	"time"
 )
 
+type Dy555Url struct {
+	Flag     string `json:"flag"`
+	Encrypt  int    `json:"encrypt"`
+	Trysee   int    `json:"trysee"`
+	Points   int    `json:"points"`
+	Link     string `json:"link"`
+	LinkNext string `json:"link_next"`
+	LinkPre  string `json:"link_pre"`
+	VodData  struct {
+		VodName     string `json:"vod_name"`
+		VodActor    string `json:"vod_actor"`
+		VodDirector string `json:"vod_director"`
+		VodClass    string `json:"vod_class"`
+	} `json:"vod_data"`
+	Url     string `json:"url"`
+	UrlNext string `json:"url_next"`
+	From    string `json:"from"`
+	Server  string `json:"server"`
+	Note    string `json:"note"`
+	Id      string `json:"id"`
+	Sid     int    `json:"sid"`
+	Nid     int    `json:"nid"`
+}
 type JxApi struct {
 	Name   string `json:"name"`
 	Url    string `json:"url"`
@@ -86,8 +113,10 @@ func GetPlayUrl(url string) (res model.PlayResponse) {
 		switch n {
 		case "555dy":
 			fmt.Printf("555dy请求地址: %s", url)
+			//playurl := GetDy555Play(url)
 			res.Url = url
 			res.Parse = 1
+			//res.Header = map[string]string{"referer": url}
 			return
 
 		default:
@@ -100,4 +129,27 @@ func GetPlayUrl(url string) (res model.PlayResponse) {
 
 	}
 	return
+}
+
+func GetDy555Play(url string) (playurl string) {
+	client := resty.New()
+	//client.SetProxy("http://
+	client.SetRetryWaitTime(time.Second * 15) //设置超时时间
+
+	dyUrlGet, _ := client.R().
+		SetHeaders(
+			map[string]string{
+				"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.63 Safari/537.36 Edg/102.0.1245.33",
+			},
+		).
+		Get(url)
+	dyUrlStr := GetBetweenStr(dyUrlGet.String(), `player_aaaa=`, `</script>`)
+	var dy555Url Dy555Url
+	err := json.Unmarshal([]byte(dyUrlStr), &dy555Url)
+	if err != nil {
+		log.Fatal(err)
+	}
+	playurl = `https://player.sakurot.com:3458/?url=` + dy555Url.Url + `&jump=` + url
+
+	return playurl
 }

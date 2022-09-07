@@ -23,7 +23,7 @@ func (this *IQYTV) Search(wd string) (res []model.VodInfo) {
 		// 从芒果api中取分类页中的数据
 		Get(global.IqiyiSobaseUrl + wd)
 	if err != nil {
-		fmt.Println("ddddddd")
+		fmt.Println(err)
 	}
 	c := get.Result().(*response.IqiyiSoJson)
 
@@ -38,12 +38,14 @@ func (this *IQYTV) Search(wd string) (res []model.VodInfo) {
 			for _, bb := range classListID { //判断是否在类型中
 				if bb == cc {
 					d := base64.StdEncoding.EncodeToString([]byte(b + "|" + cc + "|" + x.GTitle + "|" + x.GImg))
-					res = append(res, model.VodInfo{
-						VodId:      d,
-						VodName:    x.GTitle,
-						VodPic:     x.GImg,
-						VodRemarks: x.GMeta,
-					})
+					res = append(
+						res, model.VodInfo{
+							VodId:      d,
+							VodName:    x.GTitle,
+							VodPic:     x.GImg,
+							VodRemarks: x.GMeta,
+						},
+					)
 				}
 			}
 
@@ -61,12 +63,14 @@ func (this *IQYTV) Search(wd string) (res []model.VodInfo) {
 						break
 					}
 					d := base64.StdEncoding.EncodeToString([]byte(b + "|" + cc + "|" + x.GTitle + "|" + x.GImg))
-					res = append(res, model.VodInfo{
-						VodId:      d,
-						VodName:    x.GTitle,
-						VodPic:     x.GImg,
-						VodRemarks: x.GMeta,
-					})
+					res = append(
+						res, model.VodInfo{
+							VodId:      d,
+							VodName:    x.GTitle,
+							VodPic:     x.GImg,
+							VodRemarks: x.GMeta,
+						},
+					)
 				}
 			}
 		}

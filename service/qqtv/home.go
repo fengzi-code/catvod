@@ -61,7 +61,6 @@ func (this *QQTV) GetHome() (res model.HomeContent) {
 		return
 	}
 	this.FilterMap = utils.LoadFilterJson(filterJsonFile)
-	fmt.Printf("%+v\n", this.FilterMap)
 	res.Filters = this.FilterMap
 	// 从页面获取VodInfo
 	res.VodList = GetVodInfo(doc)

@@ -15,7 +15,6 @@ import (
 const dy555CateGoryApi = "https://www.5dy6.cc/vodshow/%s-%s-%s-%s-%s----%d---%s.html"
 
 func (this *DY555) GetCategory(typeId string, page int) (res model.Category) {
-	fmt.Println(this.Filters)
 	lang := utils.GetBetweenStr(this.Filters, `lang=`, `&`)
 	area := utils.GetBetweenStr(this.Filters, `area=`, `&`)
 	item := utils.GetBetweenStr(this.Filters, `item=`, `&`)
@@ -35,7 +34,7 @@ func (this *DY555) GetCategory(typeId string, page int) (res model.Category) {
 			page, year,
 		)
 	}
-	fmt.Println(url)
+	fmt.Printf("请求的分类地址: %s \n", url)
 	doc, err := htmlquery.LoadURL(url)
 	if err != nil {
 		fmt.Println("dy555 get home html error: ", err)
@@ -53,7 +52,6 @@ func (this *DY555) GetCategory(typeId string, page int) (res model.Category) {
 		pageCount = strings.Replace(pageCount, `-`, ``, -1)
 
 	}
-	fmt.Println("pageCountNode:", len(pageCountNode), "pageCount:", pageCount)
 	res.Page = page
 	res.Limit = 12
 	res.PageCount, _ = strconv.Atoi(pageCount)
@@ -61,10 +59,8 @@ func (this *DY555) GetCategory(typeId string, page int) (res model.Category) {
 	list := htmlquery.Find(
 		doc, "//div[@class='module-items module-poster-items-base ']/a",
 	)
-	//fmt.Println("dy555 list: ", htmlquery.OutputHTML(list[0], true))
 	vodInfo := make([]model.VodInfo, 0)
 	for _, item := range list {
-		//a := htmlquery.FindOne(item, "//a[@class='figure']")
 		vodName := htmlquery.SelectAttr(item, "title")
 		vodId := htmlquery.SelectAttr(item, "href")
 		vodId = utils.GetBetweenStr(vodId, "tail/", ".")
@@ -72,8 +68,7 @@ func (this *DY555) GetCategory(typeId string, page int) (res model.Category) {
 		vodPic := htmlquery.SelectAttr(img, "data-original")
 		remarks := htmlquery.FindOne(item, "//div [@class='module-item-note']")
 		vodRemarks := htmlquery.InnerText(remarks)
-		fmt.Println(vodName, vodId, vodPic, vodRemarks)
-
+		fmt.Printf("视频名字: %s, 视频id: %s, 视频图片: %s, 视频评论: %s, \n", vodName, vodId, vodPic, vodRemarks)
 		vodInfo = append(
 			vodInfo, model.VodInfo{
 				VodId:      vodId,
