@@ -23,7 +23,7 @@ func main() {
 		ip   string
 	)
 
-	flag.StringVar(&port, "port", "80", "端口号")
+	flag.StringVar(&port, "port", "8080", "端口号")
 	flag.StringVar(&mode, "mode", "debug", "gin模式，可选debug,release, 默认debug")
 	flag.Parse()
 	if mode == "release" {
