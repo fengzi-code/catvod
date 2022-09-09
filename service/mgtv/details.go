@@ -122,7 +122,6 @@ func (this *MGTV) GetDetails(ids []string) (res []model.VodDetail) {
 					tmp = append(tmp, defaultIndex, x) //[10000,0]
 				} else {
 					z, _ := strconv.Atoi(q) //带第1集样式的取出中间的数字
-					fmt.Println(z)
 					tmp = append(tmp, z, x) //  [1,0]
 				}
 				test = append(test, tmp) //将切片添加到二维数组

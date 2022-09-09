@@ -33,7 +33,12 @@ func (this *DY555) GetHome() (res model.HomeContent) {
 	this.VodClass = utils.LoadClassJson(classJsonFile)
 	res.VodClass = this.VodClass
 	this.FilterMap = make(model.FilterMap)
-	filterJsonFile := global.DY555StaticDir + "/filters.json"
+	var filterJsonFile string
+	if global.AppMode == "f" {
+		filterJsonFile = global.DY555StaticDir + "/f_filters.json"
+	} else {
+		filterJsonFile = global.DY555StaticDir + "/filters.json"
+	}
 	exist, err = utils.PathExists(filterJsonFile)
 	FilterMap := make(model.FilterMap)
 	if !exist {
@@ -72,7 +77,7 @@ func (this *DY555) GetHome() (res model.HomeContent) {
 		vodPic := htmlquery.SelectAttr(img, "data-original")
 		remarks := htmlquery.FindOne(item, "//div [@class='module-item-note']")
 		vodRemarks := htmlquery.InnerText(remarks)
-		fmt.Printf("视频名字: %s, 视频id: %s, 视频图片: %s, 视频评论: %s, \n", vodName, vodId, vodPic, vodRemarks)
+		fmt.Printf("视频名字: %s, 视频id: %s, 视频图片: %s, 视频描述: %s, \n", vodName, vodId, vodPic, vodRemarks)
 		vodInfo = append(
 			vodInfo, model.VodInfo{
 				VodId:      vodId,

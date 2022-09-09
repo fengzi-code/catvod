@@ -1,6 +1,7 @@
 package dy555
 
 import (
+	"catvod/global"
 	"catvod/model"
 	"fmt"
 	"github.com/antchfx/htmlquery"
@@ -89,6 +90,14 @@ func (this *DY555) GetDetails(ids []string) (res []model.VodDetail) {
 			reg = regexp.MustCompile(`/vodplay/(.*)html`)
 			hrefs := reg.FindAllString(html, -1)
 			var playurl string
+			// 过滤家庭模式中的欧美电视剧
+			if len(urls) > 2 && global.AppMode == "f" {
+				if detail.VodArea == "美国" || detail.VodArea == "法国" || detail.VodArea == "英国" || detail.
+					VodArea == "德国" || detail.VodArea == "其他" || detail.TypeName == "美剧" || detail.TypeName == "欧美剧" {
+					fmt.Printf("app运行于家庭模式中,过滤对--[ %s ]--的请求!", detail.VodName)
+					return nil
+				}
+			}
 			for i, u := range urls {
 				u = strings.Replace(u, "<span>", "", -1)
 				u = strings.Replace(u, "</span>", "", -1)

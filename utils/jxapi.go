@@ -112,7 +112,7 @@ func GetPlayUrl(url string) (res model.PlayResponse) {
 
 		switch n {
 		case "555dy":
-			fmt.Printf("555dy请求地址: %s", url)
+			fmt.Printf("555dy请求地址: %s \n", url)
 			//playurl := GetDy555Play(url)
 			res.Url = url
 			res.Parse = 1

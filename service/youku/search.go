@@ -106,7 +106,7 @@ func (this *YOUKU) Search(wd string) (res []model.VodInfo) {
 				}
 				pic := s.Nodes[0].Data.PosterDTO.VThumbUrl
 				remark := s.Nodes[0].Data.StripeBottom
-				fmt.Printf("视频名字: %s, 视频id: %s, 视频图片: %s, 视频评论: %s, \n", name, vid, pic, remark)
+				fmt.Printf("视频名字: %s, 视频id: %s, 视频图片: %s, 视频描述: %s, \n", name, vid, pic, remark)
 				res = append(
 					res, model.VodInfo{
 						VodId:      vid,

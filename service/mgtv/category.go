@@ -38,7 +38,7 @@ func (this *MGTV) GetCategory(typeId string, page int) (res model.Category) {
 		} else {
 			vodRemarks = v.RightCorner.Text + "[" + v.UpdateInfo + "]"
 		}
-		fmt.Printf("视频名字: %s, 视频id: %s, 视频图片: %s, 视频评论: %s, \n", v.Title, v.PlayPartId, v.Img, vodRemarks)
+		fmt.Printf("视频名字: %s, 视频id: %s, 视频图片: %s, 视频描述: %s, \n", v.Title, v.PlayPartId, v.Img, vodRemarks)
 		res.VodList = append(
 			res.VodList, model.VodInfo{
 				VodId:      v.PlayPartId,

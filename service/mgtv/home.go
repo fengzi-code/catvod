@@ -50,7 +50,7 @@ func (this *MGTV) GetHome() (res model.HomeContent) {
 	res.VodList = make([]model.VodInfo, 0)
 
 	for _, v := range c.Data {
-		fmt.Printf("视频名字: %s, 视频id: %d, 视频图片: %s, 视频评论: %s, \n", v.Name, v.VideoId, v.Image, v.Desc)
+		fmt.Printf("视频名字: %s, 视频id: %d, 视频图片: %s, 视频描述: %s, \n", v.Name, v.VideoId, v.Image, v.Desc)
 		res.VodList = append(
 			res.VodList, model.VodInfo{
 				VodId:      strconv.Itoa(v.VideoId),

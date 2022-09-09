@@ -36,13 +36,15 @@ func GetVodInfo(doc *html.Node) (vodInfo []model.VodInfo) {
 		} else if strings.TrimSpace(vodPic) == "" {
 			vodPic = global.DefaultPic
 		}
-		fmt.Printf("视频名字: %s, 视频id: %s, 视频图片: %s, 视频评论: %s, \n", vodName, vodId, vodPic, vodRemarks)
-		vodInfo = append(vodInfo, model.VodInfo{
-			VodId:      vodId,
-			VodName:    vodName,
-			VodPic:     vodPic,
-			VodRemarks: vodRemarks,
-		})
+		fmt.Printf("视频名字: %s, 视频id: %s, 视频图片: %s, 视频描述: %s, \n", vodName, vodId, vodPic, vodRemarks)
+		vodInfo = append(
+			vodInfo, model.VodInfo{
+				VodId:      vodId,
+				VodName:    vodName,
+				VodPic:     vodPic,
+				VodRemarks: vodRemarks,
+			},
+		)
 	}
 	return
 }

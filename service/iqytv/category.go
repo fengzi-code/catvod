@@ -48,7 +48,7 @@ func (this *IQYTV) GetCategory(typeId string, page int) (res model.Category) {
 		} else {
 			vodList.VodRemarks = "更新至 " + strconv.Itoa(x.LatestOrder) + "集"
 		}
-		fmt.Printf("视频名字: %s, 视频id: %s, 视频图片: %s, 视频评论: %s, \n", x.Title, d, x.ImageUrl, vodList.VodRemarks)
+		fmt.Printf("视频名字: %s, 视频id: %s, 视频图片: %s, 视频描述: %s, \n", x.Title, d, x.ImageUrl, vodList.VodRemarks)
 		res.VodList = append(res.VodList, vodList)
 	}
 	return

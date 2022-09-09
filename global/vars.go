@@ -10,4 +10,6 @@ var (
 		"Host":         "",
 	}
 	BindAddr string
+	//  AppMode  app运行模式
+	AppMode string
 )

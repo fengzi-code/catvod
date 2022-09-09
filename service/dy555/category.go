@@ -1,6 +1,7 @@
 package dy555
 
 import (
+	"catvod/global"
 	"catvod/model"
 	"catvod/utils"
 	"fmt"
@@ -23,6 +24,9 @@ func (this *DY555) GetCategory(typeId string, page int) (res model.Category) {
 	class := utils.GetBetweenStr(this.Filters, `class=`, `&`)
 
 	var url string
+	if global.AppMode == "f" && area == "" && typeId == "2" {
+		area = "大陆"
+	}
 	if class != "" {
 		url = fmt.Sprintf(
 			dy555CateGoryApi, class, url2.QueryEscape(area), sort, url2.QueryEscape(item), url2.QueryEscape(lang), page,
@@ -68,7 +72,7 @@ func (this *DY555) GetCategory(typeId string, page int) (res model.Category) {
 		vodPic := htmlquery.SelectAttr(img, "data-original")
 		remarks := htmlquery.FindOne(item, "//div [@class='module-item-note']")
 		vodRemarks := htmlquery.InnerText(remarks)
-		fmt.Printf("视频名字: %s, 视频id: %s, 视频图片: %s, 视频评论: %s, \n", vodName, vodId, vodPic, vodRemarks)
+		fmt.Printf("视频名字: %s, 视频id: %s, 视频图片: %s, 视频描述: %s, \n", vodName, vodId, vodPic, vodRemarks)
 		vodInfo = append(
 			vodInfo, model.VodInfo{
 				VodId:      vodId,
