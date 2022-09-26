@@ -10,6 +10,7 @@ require (
 
 require (
 	github.com/fsnotify/fsnotify v1.5.3
+	github.com/otiai10/gosseract/v2 v2.4.0
 	github.com/spf13/viper v1.11.0
 	golang.org/x/net v0.0.0-20220412020605-290c469a71a5
 )

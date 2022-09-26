@@ -2,8 +2,10 @@ package service
 
 import (
 	"catvod/model"
+	"catvod/service/cokemv"
 	"catvod/service/dy555"
 	"catvod/service/iqytv"
+	"catvod/service/lgyy"
 	"catvod/service/mgtv"
 	"catvod/service/qqtv"
 	"catvod/service/youku"
@@ -29,6 +31,10 @@ func NewTVProvider(p string) TVProvider {
 		return &dy555.DY555{}
 	case "youku":
 		return &youku.YOUKU{}
+	case "lgyy":
+		return &lgyy.LGYY{}
+	case "cokemv":
+		return &cokemv.COKEMV{}
 	default:
 		return &dy555.DY555{}
 	}

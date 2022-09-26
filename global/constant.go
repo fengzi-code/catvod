@@ -13,6 +13,8 @@ const (
 	IQYStaticDir          = "static/iqy"
 	ZJStaticDir           = "static/zjmiao"
 	DY555StaticDir        = "static/dy555"
+	CokemvStaticDir       = "static/cokemv"
+	LgyyStaticDir         = "static/lgyy"
 	MgBaseUrl             = "https://www.mgtv.com"
 	YOUKUStaticDir        = "static/youku"
 	IqiyiFilterBaseurl    = "https://list.iqiyi.com/www/"
