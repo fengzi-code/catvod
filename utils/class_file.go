@@ -80,3 +80,29 @@ func LoadClassJson(path string) (vodClass []model.VodClass) {
 	}
 	return
 }
+
+func LoadJson(path string, v interface{}) (vJson interface{}) {
+	filePtr, err := os.Open(path)
+	if err != nil {
+		fmt.Printf("Open file failed [Err:%s]\n", err.Error())
+		return
+	}
+	defer func() {
+		err = filePtr.Close()
+		if err != nil {
+			fmt.Println(err)
+		}
+	}()
+	bytes, err := ioutil.ReadAll(filePtr)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	err = json.Unmarshal(bytes, &v)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Printf("new: %+v\n", v)
+	}
+	return v
+}
