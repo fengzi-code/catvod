@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"catvod/global"
 	"catvod/model"
 	"encoding/json"
 	"fmt"
@@ -8,7 +9,6 @@ import (
 	"github.com/go-resty/resty/v2"
 	"github.com/spf13/viper"
 	"log"
-	"net/http"
 	"sort"
 	"strings"
 	"time"
@@ -101,35 +101,48 @@ type JxApiResponse struct {
 
 // GetPlayUrl 获取播放地址
 func GetPlayUrl(url string) (res model.PlayResponse) {
-
+	var isJx string
 	for _, v := range JxApiList { // 轮询法
 		//reqUrl := fmt.Sprintf("%s%s", v.Url, url)
 		n := v.Name
-		if strings.Contains(url, "5dy6") || strings.Contains(url, "lgyy") || strings.Contains(url, "cokemv") {
+		if strings.Contains(url, "5dy6") || strings.Contains(url, "cokemv") || strings.Contains(url, "lgyy") {
 			n = "555dy"
 			//playMaoUrl := GetMiaoUrl(url)
 			//reqUrl = fmt.Sprintf("%s%s", "https://jx.zjmiao.com/?url=", playMaoUrl)
+		} else if strings.Contains(url, "v.qq.com") || strings.Contains(url, "www.iqiyi.com") || strings.Contains(
+			url, "www.mgtv.com",
+		) || strings.Contains(url, "v.youku.com") {
+			if global.IsRongxin {
+				n = "rongxin"
+			}
+
 		}
 
 		switch n {
 		case "555dy":
 			fmt.Printf("555dy请求地址: %s \n", url)
-			//playurl, cook, head := GetDy555Play(url)
-			//res.Url = playurl
-
-			res.Header = map[string]string{
-				"User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36",
-			}
+			//playurl := GetDy555Play(url)
 			res.Url = url
 			res.Parse = 1
-
+			//res.Header = map[string]string{"referer": url}
 			return
+		case "rongxin":
+			if isJx == url+"ok" {
+				return
+			}
+			res.Parse = 0
+			res.Url = RongXinJX(url)
+			if res.Url != "" {
+				isJx = url + "ok"
+			}
+			fmt.Printf("请求地址: %s, 解析API: %s \n", url, res.Url)
 
 		default:
-			fmt.Printf("请求地址: %s, 解析API: %s", url, v.Url)
+
 			res.Url = url
 			res.PlayUrl = v.Url
 			res.Parse = 1
+			fmt.Printf("请求地址: %s, 解析API: %s \n", url, v.Url)
 			return
 		}
 
@@ -137,10 +150,11 @@ func GetPlayUrl(url string) (res model.PlayResponse) {
 	return
 }
 
-func GetDy555Play(url string) (playurl string, cookies []*http.Cookie, headers http.Header) {
+func GetDy555Play(url string) (playurl string) {
 	client := resty.New()
 	//client.SetProxy("http://
 	client.SetRetryWaitTime(time.Second * 15) //设置超时时间
+
 	dyUrlGet, _ := client.R().
 		SetHeaders(
 			map[string]string{
@@ -148,18 +162,24 @@ func GetDy555Play(url string) (playurl string, cookies []*http.Cookie, headers h
 			},
 		).
 		Get(url)
-
 	dyUrlStr := GetBetweenStr(dyUrlGet.String(), `player_aaaa=`, `</script>`)
 	var dy555Url Dy555Url
 	err := json.Unmarshal([]byte(dyUrlStr), &dy555Url)
 	if err != nil {
 		log.Fatal(err)
 	}
-	headers = make(map[string][]string)
 	playurl = `https://player.sakurot.com:3458/?url=` + dy555Url.Url + `&jump=` + url
-	//playurl = `https://www.5dy6.cc/static/player/duoduozy.js?v=202207055`
-	headers.Set("Host", "www.5dy6.cc")
-	headers.Set("Referer", url)
 
-	return playurl, dyUrlGet.Cookies(), headers
+	return playurl
+}
+
+func RongXinJX(url string) (playurl string) {
+	client := resty.New()
+	dyUrlGet, _ := client.R().
+		SetResult(model.PlayResponse{}).
+		ForceContentType(global.JsonType).
+		Get("http://svip.rongxingvr.top/api/?key=" + global.RongXinKey + "&url=" + url)
+	c := dyUrlGet.Result().(*model.PlayResponse)
+	fmt.Println("融兴解析结果：" + c.Url + "!\n")
+	return c.Url
 }

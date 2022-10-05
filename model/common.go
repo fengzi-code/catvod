@@ -23,3 +23,8 @@ type VodInfo struct {
 	VodPic     string `json:"vod_pic"`     // 影视展示图片
 	VodRemarks string `json:"vod_remarks"` // 影视标记，如多少集，展示在视频名上方
 }
+
+type AppKey struct {
+	Key  string `json:"key"`
+	Name string `json:"name"`
+}

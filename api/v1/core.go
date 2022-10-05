@@ -39,7 +39,7 @@ func CoreHandler(ctx *gin.Context) {
 		ctx.JSON(200, data)
 	case ok2:
 		data := utils.GetPlayUrl(play)
-		fmt.Printf("接口为: %s, 播放地址: %s,解析模式: %d,解析地址: %s\n", tvProvider, data.Url, data.Parse, data.PlayUrl)
+		fmt.Printf("接口为: %s, 播放地址: %s,解析模式: %d,解析地址: %s \n", tvProvider, data.Url, data.Parse, data.PlayUrl)
 		ctx.JSON(http.StatusOK, data)
 	case ok3:
 		idsArr := make([]string, 0)

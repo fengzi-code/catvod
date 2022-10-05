@@ -81,6 +81,7 @@ func LoadClassJson(path string) (vodClass []model.VodClass) {
 	return
 }
 
+// json转结构化通用方法
 func LoadJson(path string, v interface{}) (vJson interface{}) {
 	filePtr, err := os.Open(path)
 	if err != nil {
@@ -104,5 +105,6 @@ func LoadJson(path string, v interface{}) (vJson interface{}) {
 	} else {
 		fmt.Printf("new: %+v\n", v)
 	}
-	return v
+	vJson = v
+	return vJson
 }

@@ -7,25 +7,25 @@ import (
 	"catvod/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/mitchellh/mapstructure"
 )
-
-type Key struct {
-	Key  string `json:"key"`
-	Name string `json:"name"`
-}
 
 func GetConfig(c *gin.Context) {
 	m, ok1 := c.GetQuery("m") // 取appmode,f=family
 	k, ok2 := c.GetQuery("k") // 取key,没有key则跳过
 	//http://xxxxxxx/config?m=f&k=key
 	if ok2 {
-
-		var key Key
-		aaa := utils.LoadJson("static/appkey.json", key)
-
-		fmt.Println(key.Name, aaa)
-		if k == key.Name {
-			fmt.Println("dddddddddddddddd")
+		var appkey model.AppKey
+		tmp := utils.LoadJson("static/appkey.json", appkey)
+		//使用mapstructure.Decode()方法
+		err := mapstructure.Decode(tmp, &appkey)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+		fmt.Println(k, appkey.Name, appkey.Key)
+		if k == appkey.Name {
+			global.IsRongxin = true
+			global.RongXinKey = appkey.Key
 		}
 	}
 	global.AppMode = m
