@@ -107,15 +107,20 @@ func GetPlayUrl(url string) (res model.PlayResponse) {
 		n := v.Name
 		if strings.Contains(url, "5dy6") || strings.Contains(url, "cokemv") || strings.Contains(url, "lgyy") {
 			n = "555dy"
-			//playMaoUrl := GetMiaoUrl(url)
-			//reqUrl = fmt.Sprintf("%s%s", "https://jx.zjmiao.com/?url=", playMaoUrl)
 		} else if strings.Contains(url, "v.qq.com") || strings.Contains(url, "www.iqiyi.com") || strings.Contains(
 			url, "www.mgtv.com",
-		) || strings.Contains(url, "v.youku.com") {
+		) || strings.Contains(url, "v.youku.com") || strings.Contains(url, "tv.sohu.com") || strings.Contains(
+			url, "v.pptv.com",
+		) || strings.Contains(url, "www.ixigua.com") || strings.Contains(url, "1905.com") || strings.Contains(
+			url, "bilibili.com",
+		) {
 			if global.IsRongxin {
 				n = "rongxin"
 			}
-
+		} else if strings.Contains(url, "RongXingVR-") {
+			if global.IsRongxin {
+				n = "RongXingVR"
+			}
 		}
 
 		switch n {
@@ -131,12 +136,21 @@ func GetPlayUrl(url string) (res model.PlayResponse) {
 				return
 			}
 			res.Parse = 0
-			res.Url = RongXinJX(url)
+			res.Url = RongXinJX("http://svip.rongxingvr.top/api/?key=" + global.RongXinKey + "&url=" + url)
 			if res.Url != "" {
 				isJx = url + "ok"
 			}
 			fmt.Printf("请求地址: %s, 解析API: %s \n", url, res.Url)
-
+		case "RongXingVR":
+			if isJx == url+"ok" {
+				return
+			}
+			res.Parse = 0
+			res.Url = RongXinJX("https://svip.rongxingvr.top/api/rxm3u8fuzai.php?key=" + global.RongXinKey + "&url=" + url)
+			if res.Url != "" {
+				isJx = url + "ok"
+			}
+			fmt.Printf("请求地址: %s, 解析API: %s \n", url, res.Url)
 		default:
 
 			res.Url = url
@@ -173,12 +187,12 @@ func GetDy555Play(url string) (playurl string) {
 	return playurl
 }
 
-func RongXinJX(url string) (playurl string) {
+func RongXinJX(jxurl string) (playurl string) {
 	client := resty.New()
 	dyUrlGet, _ := client.R().
 		SetResult(model.PlayResponse{}).
 		ForceContentType(global.JsonType).
-		Get("http://svip.rongxingvr.top/api/?key=" + global.RongXinKey + "&url=" + url)
+		Get(jxurl)
 	c := dyUrlGet.Result().(*model.PlayResponse)
 	fmt.Println("融兴解析结果：" + c.Url + "!\n")
 	return c.Url

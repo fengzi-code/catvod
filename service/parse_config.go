@@ -43,6 +43,9 @@ func GetConfig(path string) (res model.ServerConfig) {
 				if reg.MatchString(v.Api) {
 					match := reg.FindStringSubmatch(v.Api)
 					oldAddr = match[0]
+					if oldAddr == "103.222.188.156:99" {
+						continue
+					}
 					newApi := strings.Replace(v.Api, oldAddr, global.BindAddr, -1)
 					res.Sites[i].Api = newApi
 				}

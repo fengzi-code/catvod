@@ -23,4 +23,5 @@ const (
 	IqiyiSobaseUrl        = "https://pcw-api.iqiyi.com/strategy/pcw/data/soBaseCardLeftSide?pageNum=1&site=iqiyi&key="
 	MgtvOrigin            = "https://so.mgtv.com"
 	MgtvReferer           = "https://so.mgtv.com"
+	RxStaticDir           = "static/rongxin"
 )

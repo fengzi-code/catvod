@@ -8,6 +8,8 @@ import (
 	"catvod/service/lgyy"
 	"catvod/service/mgtv"
 	"catvod/service/qqtv"
+	"catvod/service/rxlg"
+	"catvod/service/rxzh"
 	"catvod/service/youku"
 )
 
@@ -35,6 +37,10 @@ func NewTVProvider(p string) TVProvider {
 		return &lgyy.LGYY{}
 	case "cokemv":
 		return &cokemv.COKEMV{}
+	case "rxzh":
+		return &rxzh.RXZH{}
+	case "rxlg":
+		return &rxlg.RXLG{}
 	default:
 		return &dy555.DY555{}
 	}

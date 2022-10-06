@@ -16,8 +16,8 @@ func GetConfig(c *gin.Context) {
 	//http://xxxxxxx/config?m=f&k=key
 	if ok2 {
 		var appkey model.AppKey
-		tmp := utils.LoadJson("static/appkey.json", appkey)
-		//使用mapstructure.Decode()方法
+		tmp := utils.LoadJson("static/appKey.json", appkey)
+		//使用mapstructure.Decode()方法、map和结构体转换
 		err := mapstructure.Decode(tmp, &appkey)
 		if err != nil {
 			fmt.Println(err.Error())
@@ -28,6 +28,7 @@ func GetConfig(c *gin.Context) {
 			global.RongXinKey = appkey.Key
 		}
 	}
+	fmt.Println("当前是否符合融兴蓝光要求：", global.IsRongxin)
 	global.AppMode = m
 	var data model.ServerConfig
 	switch {

@@ -1,0 +1,118 @@
+[
+  {
+    "type_id": "1",
+    "type_name": "电影"
+  },
+  {
+    "type_id": "2",
+    "type_name": "连续剧"
+  },
+  {
+    "type_id": "3",
+    "type_name": "综艺"
+  },
+  {
+    "type_id": "4",
+    "type_name": "动漫"
+  },
+  {
+    "type_id": "6",
+    "type_name": "动作"
+  },
+  {
+    "type_id": "7",
+    "type_name": "喜剧"
+  },
+  {
+    "type_id": "8",
+    "type_name": "爱情"
+  },
+  {
+    "type_id": "9",
+    "type_name": "科幻"
+  },
+  {
+    "type_id": "10",
+    "type_name": "恐怖"
+  },
+  {
+    "type_id": "11",
+    "type_name": "剧情"
+  },
+  {
+    "type_id": "12",
+    "type_name": "战争"
+  },
+  {
+    "type_id": "13",
+    "type_name": "国产剧"
+  },
+  {
+    "type_id": "14",
+    "type_name": "港台剧"
+  },
+  {
+    "type_id": "15",
+    "type_name": "日韩剧"
+  },
+  {
+    "type_id": "16",
+    "type_name": "欧美剧"
+  },
+  {
+    "type_id": "20",
+    "type_name": "惊悚"
+  },
+  {
+    "type_id": "21",
+    "type_name": "犯罪"
+  },
+  {
+    "type_id": "22",
+    "type_name": "冒险"
+  },
+  {
+    "type_id": "23",
+    "type_name": "悬疑"
+  },
+  {
+    "type_id": "24",
+    "type_name": "动画"
+  },
+  {
+    "type_id": "25",
+    "type_name": "武侠"
+  },
+  {
+    "type_id": "26",
+    "type_name": "奇幻"
+  },
+  {
+    "type_id": "27",
+    "type_name": "记录"
+  },
+  {
+    "type_id": "29",
+    "type_name": "日本动漫"
+  },
+  {
+    "type_id": "30",
+    "type_name": "国产动漫"
+  },
+  {
+    "type_id": "31",
+    "type_name": "欧美动漫"
+  },
+  {
+    "type_id": "32",
+    "type_name": "bilibili"
+  },
+  {
+    "type_id": "33",
+    "type_name": "国创"
+  },
+  {
+    "type_id": "34",
+    "type_name": "番剧"
+  }
+]

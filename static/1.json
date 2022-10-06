@@ -1,6 +1,24 @@
 {
   "sites": [
     {
+      "key": "rxlg",
+      "name": "融兴蓝光",
+      "type": 4,
+      "api": "http://192.168.10.105:8080/api/v1/rxlg",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0
+    },
+    {
+      "key": "rxzh",
+      "name": "综合影视",
+      "type": 4,
+      "api": "http://192.168.10.105:8080/api/v1/rxzh",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0
+    },
+    {
       "key": "cokemv",
       "name": "cokemv",
       "type": 4,
@@ -93,7 +111,7 @@
     {
       "name": "Pro",
       "type": 1,
-      "url": "http://api.vip123kan.vip/?url=",
+      "url": "https://svip.rongxingvr.top/api/rxm3u8fuzai.php?key=F22QN5P1ElQIxOEZh8&url=",
       "ext": {
         "flag": [
           "youku",
