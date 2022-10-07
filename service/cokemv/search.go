@@ -26,11 +26,12 @@ func (this *COKEMV) Search(wd string) (res []model.VodInfo) {
 	var imgCode string
 	var cookies []*http.Cookie
 	client := resty.New()
+	var i int
 	for {
 		// 取图片验证码
+		i = i + 1
 		imgCode, cookies = utils.GetImgCode(imgUrl)
 		fmt.Println("imcode............", imgCode)
-
 		// 提交图片验证码
 		post, _ := client.R().
 			SetHeaders(
@@ -46,7 +47,7 @@ func (this *COKEMV) Search(wd string) (res []model.VodInfo) {
 		//fmt.Println(
 		//	"cokes........................", post.Cookies(), cookies, "code:", json.Code, "msg:"+json.Msg+"22222222",
 		//)
-		if json.Msg == "ok" {
+		if json.Msg == "ok" || i > 5 {
 			break
 		}
 		time.Sleep(time.Second / 10)
