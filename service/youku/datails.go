@@ -3,6 +3,7 @@ package youku
 import (
 	"catvod/model"
 	"catvod/model/youku/response"
+	"catvod/utils"
 	"crypto/md5"
 	"fmt"
 	"github.com/go-resty/resty/v2"
@@ -15,6 +16,7 @@ import (
 const (
 	appkey    = "24679788"
 	detailApi = "https://v.youku.com/v_show/id_"
+	detail301 = `https://v.youku.com/v_nextstage/id_%s.html`
 	h5Api     = "mtop.youku.columbus.gateway.new.execute"
 	h5Url     = "https://acs.youku.com/h5/" + h5Api + "/1.0/?jsv=2.6.2&appKey=" + appkey + "&api=" + h5Api
 	desData   = `{"ms_codes":"2019030100","params":"{\"biz\":\"new_detail_web\",\"videoId\":\"iiiddd\",\"scene\":\"web_page\"}","system_info":"{\"os\":\"pc\",\"device\":\"pc\",\"ver\":\"1.0.0\",\"appPackageKey\":\"pcweb\",\"appPackageId\":\"pcweb\"}"}`
@@ -22,11 +24,30 @@ const (
 )
 
 func (this *YOUKU) GetDetails(ids []string) (res []model.VodDetail) {
-	for _, id := range ids {
+	for _, idd := range ids {
+		client := resty.New()
+		get1, _ := client.R().
+			SetHeaders(
+				map[string]string{
+					"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.63 Safari/537.36 Edg/102.0.1245.33",
+				},
+			).Get(fmt.Sprintf(detail301, idd))
+		id := utils.GetBetweenStr(get1.String(), `videoId2: '`, `'`)
+		fmt.Println(get1.String(), "\n3333333333333333", id)
 		desDataR := strings.ReplaceAll(desData, "iiiddd", id)
 		playDataR := strings.ReplaceAll(playData, "iiiddd", id)
 		url := fmt.Sprintf("%s%s.html", detailApi, id)
-		client := resty.New()
+		//resp, err := http.Get(detail301)
+		//if err != nil {
+		//	log.Fatalf("http.Get => %v", err.Error())
+		//}
+		//
+		//// Your magic function. The Request in the Response is the last URL the
+		//// client tried to access.
+		//urlLocal := resp.Request.URL.String()
+		//
+		//fmt.Println("4444444444444444444", urlLocal)
+
 		client.SetRetryWaitTime(time.Second * 15) //设置超时时间
 		get, _ := client.R().
 			SetHeaders(

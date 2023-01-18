@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-const dy555FilterUrl = "https://www.5dy6.cc/vodshow/%s-----------.html"
+const dy555FilterUrl = "https://www.555yy2.com/vodshow/%s-----------.html"
 
 func GetFilterMap(t string) (res model.Filters) {
 	url := fmt.Sprintf(dy555FilterUrl, t)

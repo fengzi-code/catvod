@@ -1,6 +1,6 @@
 package response
 
-type YoukuCategory struct {
+type YoukuCategory1 struct {
 	Success bool   `json:"success"`
 	Message string `json:"message"`
 	Data    struct {
@@ -98,6 +98,52 @@ type YoukuCategory struct {
 			AdType           int           `json:"adType"`
 			IsAd             bool          `json:"isAd"`
 		} `json:"adContent"`
+	} `json:"data"`
+	Code    interface{} `json:"code"`
+	JumpUrl interface{} `json:"jumpUrl"`
+}
+
+type YoukuCategory struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+	Data    struct {
+		FilterData struct {
+			Param struct {
+				Type string `json:"type"`
+			} `json:"param"`
+			ListData []struct {
+				SummaryType  string `json:"summaryType"`
+				Type         string `json:"type"`
+				Img          string `json:"img"`
+				Summary      string `json:"summary"`
+				Title        string `json:"title"`
+				SubTitle     string `json:"subTitle,omitempty"`
+				VideoLink    string `json:"videoLink"`
+				RightTagText string `json:"rightTagText,omitempty"`
+			} `json:"listData"`
+			Session struct {
+				SubIndex  int `json:"subIndex"`
+				TrackInfo struct {
+					Parentdrawerid string `json:"parentdrawerid"`
+				} `json:"trackInfo"`
+				SpmA     string `json:"spmA"`
+				Level    int    `json:"level"`
+				SpmC     string `json:"spmC"`
+				SpmB     string `json:"spmB"`
+				Index    int    `json:"index"`
+				PageName string `json:"pageName"`
+				Scene    string `json:"scene"`
+				ScmB     string `json:"scmB"`
+				Path     string `json:"path"`
+				ScmA     string `json:"scmA"`
+				ScmC     string `json:"scmC"`
+				From     string `json:"from"`
+				Id       int    `json:"id"`
+				Category string `json:"category"`
+			} `json:"session"`
+			HasMore bool `json:"hasMore"`
+		} `json:"filterData"`
+		Theme string `json:"theme"`
 	} `json:"data"`
 	Code    interface{} `json:"code"`
 	JumpUrl interface{} `json:"jumpUrl"`

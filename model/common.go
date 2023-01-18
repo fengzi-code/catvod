@@ -25,6 +25,8 @@ type VodInfo struct {
 }
 
 type AppKey struct {
-	Key  string `json:"key"`
-	Name string `json:"name"`
+	Key           string `json:"key"`
+	Name          string `json:"name"`
+	RongXinJxUrl  string `json:"rongxinjxurl"`
+	RongXingVrUrl string `json:"rongxingvrurl"`
 }

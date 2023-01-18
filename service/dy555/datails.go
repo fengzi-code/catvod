@@ -9,8 +9,8 @@ import (
 	"strings"
 )
 
-const dy555DetailsUrl = "https://www.5dy6.cc/voddetail/%s.html"
-const dy555Url = "https://www.5dy6.cc"
+const dy555DetailsUrl = "https://www.555yy2.com/voddetail/%s.html"
+const dy555Url = "https://www.555yy2.com"
 
 func (this *DY555) GetDetails(ids []string) (res []model.VodDetail) {
 	for _, id := range ids {

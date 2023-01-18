@@ -23,7 +23,7 @@ const (
 
 func (this *YOUKU) Search(wd string) (res []model.VodInfo) {
 	client := resty.New()
-	//client.SetProxy("http://
+	//https://search.youku.com/api/search?pg=fypage&keyword=
 	client.SetRetryWaitTime(time.Second * 15) //设置超时时间
 	data := strings.Replace(sData, `SoKeyword`, wd, 1)
 	ySoget, _ := client.R().

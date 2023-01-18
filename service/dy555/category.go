@@ -13,7 +13,7 @@ import (
 )
 
 //https://www.5dy6.cc/vodshow/类型-地区-排序-剧情-语言----页数---年份.html
-const dy555CateGoryApi = "https://www.5dy6.cc/vodshow/%s-%s-%s-%s-%s----%d---%s.html"
+const dy555CateGoryApi = "https://www.555yy2.com/vodshow/%s-%s-%s-%s-%s----%d---%s.html"
 
 func (this *DY555) GetCategory(typeId string, page int) (res model.Category) {
 	lang := utils.GetBetweenStr(this.Filters, `lang=`, `&`)

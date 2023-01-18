@@ -1,11 +1,7 @@
 [
   {
-    "type_id": "1",
-    "type_name": "电影"
-  },
-  {
-    "type_id": "2",
-    "type_name": "连续剧"
+    "type_id": "13",
+    "type_name": "国产剧"
   },
   {
     "type_id": "3",
@@ -44,10 +40,6 @@
     "type_name": "战争"
   },
   {
-    "type_id": "13",
-    "type_name": "国产剧"
-  },
-  {
     "type_id": "14",
     "type_name": "港台剧"
   },
@@ -58,6 +50,14 @@
   {
     "type_id": "16",
     "type_name": "欧美剧"
+  },
+  {
+    "type_id": "1",
+    "type_name": "电影"
+  },
+  {
+    "type_id": "2",
+    "type_name": "连续剧"
   },
   {
     "type_id": "20",

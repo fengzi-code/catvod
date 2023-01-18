@@ -10,12 +10,12 @@ import (
 	"io/ioutil"
 )
 
-const dyHomeApi = "https://www.5dy6.cc/label/new.html"
+const dyHomeApi = "https://www.555yy2.com/label/new.html"
 
 type DY555 struct {
 	VodClass  []model.VodClass
 	Filters   string
-	Channel   string //就是vodClass里的TypeId，只包含当前的https://www.o8tv.com/label/new.html
+	Channel   string //就是vodClass里的TypeId，只包含当前的https://www.555yy2.com/label/new.html
 	FilterMap model.FilterMap
 }
 

@@ -11,7 +11,9 @@ var (
 	}
 	BindAddr string
 	//  AppMode  app运行模式
-	AppMode    string
-	IsRongxin  bool
-	RongXinKey string
+	AppMode       string
+	IsRongxin     bool
+	RongXinKey    string
+	RongXinJxUrl  string
+	RongXingVrUrl string
 )

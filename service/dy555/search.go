@@ -10,7 +10,7 @@ import (
 	"regexp"
 )
 
-const dy55SearchUrl = "https://www.o8tv.com/vodsearch/%s-------------.html"
+const dy55SearchUrl = "https://www.555yy2.com/vodsearch/%s-------------.html"
 
 func (this *DY555) Search(wd string) (res []model.VodInfo) {
 	surl := fmt.Sprintf(dy55SearchUrl, url.QueryEscape(wd))

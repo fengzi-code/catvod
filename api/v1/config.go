@@ -27,9 +27,11 @@ func GetConfig(c *gin.Context) {
 		if k == appkey.Name {
 			global.IsRongxin = true
 			global.RongXinKey = appkey.Key
+			global.RongXinJxUrl = appkey.RongXinJxUrl
+			global.RongXingVrUrl = appkey.RongXingVrUrl
 		}
 	}
-	fmt.Println("当前是否符合融兴蓝光要求：", global.IsRongxin)
+	fmt.Println("当前是否符合融兴蓝光要求：", global.IsRongxin, global.RongXinJxUrl)
 	global.AppMode = m
 	var data model.ServerConfig
 	switch {

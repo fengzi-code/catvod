@@ -1,6 +1,10 @@
 package utils
 
-import "strings"
+import (
+	"fmt"
+	"regexp"
+	"strings"
+)
 
 //取文本中间,str原始文本,start文本前面的字符,end文本后面的字符
 func GetBetweenStr(str, start, end string) string {
@@ -19,4 +23,19 @@ func GetBetweenStr(str, start, end string) string {
 	}
 	str = string([]byte(str)[:m])
 	return str
+}
+
+//批量取文本中间,str原始文本,start文本前面的字符,end文本后面的字符
+func GetBetweenStrs(str, start, end string) []string {
+	var strs []string
+	mc := start + `(.*?)` + end
+	r := regexp.MustCompile(mc)
+	tmpStrs := r.FindAllString(str, -1)
+	for _, s := range tmpStrs {
+		s = strings.Replace(s, start, "", -1)
+		s = strings.Replace(s, end, "", -1)
+		strs = append(strs, s)
+	}
+	fmt.Println(mc, len(strs))
+	return strs
 }

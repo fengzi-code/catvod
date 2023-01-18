@@ -105,7 +105,7 @@ func GetPlayUrl(url string) (res model.PlayResponse) {
 	for _, v := range JxApiList { // 轮询法
 		//reqUrl := fmt.Sprintf("%s%s", v.Url, url)
 		n := v.Name
-		if strings.Contains(url, "5dy6") || strings.Contains(url, "cokemv") || strings.Contains(url, "lgyy") {
+		if strings.Contains(url, "555yy") || strings.Contains(url, "cokemv") || strings.Contains(url, "lgyy") {
 			n = "555dy"
 		} else if strings.Contains(url, "v.qq.com") || strings.Contains(url, "www.iqiyi.com") || strings.Contains(
 			url, "www.mgtv.com",
@@ -136,7 +136,7 @@ func GetPlayUrl(url string) (res model.PlayResponse) {
 				return
 			}
 			res.Parse = 0
-			res.Url = RongXinJX("http://svip.rongxingvr.top/api/?key=" + global.RongXinKey + "&url=" + url)
+			res.Url = RongXinJX(global.RongXinJxUrl + global.RongXinKey + "&url=" + url)
 			if res.Url != "" {
 				isJx = url + "ok"
 			}
@@ -146,7 +146,7 @@ func GetPlayUrl(url string) (res model.PlayResponse) {
 				return
 			}
 			res.Parse = 0
-			res.Url = RongXinJX("https://svip.rongxingvr.top/api/rxm3u8fuzai.php?key=" + global.RongXinKey + "&url=" + url)
+			res.Url = RongXinJX(global.RongXingVrUrl + global.RongXinKey + "&url=" + url)
 			if res.Url != "" {
 				isJx = url + "ok"
 			}
