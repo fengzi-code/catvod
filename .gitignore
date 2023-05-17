@@ -23,6 +23,8 @@
 tmp/
 logs/
 catvod
+static/1.json
+static/2.json
 catvod.*
 main
 test.png
